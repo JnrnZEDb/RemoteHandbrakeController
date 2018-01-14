@@ -5,30 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteHandbrakeController"
         mc:Ignorable="d"
-        Title="EncodeWindow" Height="500" Width="500">
-    <Grid Background="DodgerBlue">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="*"/>
-		</Grid.ColumnDefinitions>
-
-		<Grid Grid.Column="0">
+        Title="EncodeWindow" Height="500" Width="800">
+	<DockPanel>
+		<Menu DockPanel.Dock="Top">
+			<MenuItem Header="_Connection">
+				<MenuItem Header="_Connect" Click="mnuConnect_Click"/>
+				<Separator/>
+				<MenuItem Header="_Disconnect" Click="mnuDisconnect_Click"/>
+			</MenuItem>
+		</Menu>
+		<Grid Background="DodgerBlue">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="250"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="30"/>
+				<RowDefinition Height="20"/>
 			</Grid.RowDefinitions>
-			<ListBox Name="lstBoxFiles" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding}">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Name}"/>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
-			<Button Name="btnStartEncode" Grid.Row="1" Content="START" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="BtnStartEncode_Click"/>
+
+			<Grid Grid.Column="0" Grid.Row="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="30"/>
+				</Grid.RowDefinitions>
+				<ListBox Name="lstBoxFiles" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding lstFilesToEncode, UpdateSourceTrigger=PropertyChanged}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Name}"/>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+				<Button Name="btnStartEncode" Grid.Row="1" Content="START" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="BtnStartEncode_Click"/>
+			</Grid>
+			<ScrollViewer Grid.Column="1">
+				<TextBox Name="txtOutput"  Background="Black" Foreground="White" FontFamily="Console" IsReadOnly="True"/>
+			</ScrollViewer>
+			<StatusBar Grid.Row="1" Grid.ColumnSpan="2">
+				<StatusBarItem>
+					<TextBlock Name="txtConnectionStatus"/>
+				</StatusBarItem>
+				<Separator Width="2" />
+				<StatusBarItem>
+					<TextBlock Name="txtCurrentFile"/>
+				</StatusBarItem>
+			</StatusBar>
 		</Grid>
-
-		<TextBlock Name="txtOutput" Grid.Column="1" Background="Black" Foreground="White" FontFamily="Console" />
-
-
-	</Grid>
+	</DockPanel>
 </Window>

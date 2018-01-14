@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteHandbrakeController", "RemoteHandbrakeController\RemoteHandbrakeController.csproj", "{1E5D514C-6FFF-4A26-8FBB-C3F6C3CECABB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SSH.NET", "SSH.NET", "{B80FFCAD-A82E-427C-92E6-7315463D0263}"
+	ProjectSection(SolutionItems) = preProject
+		SSH.NET\Renci.SshNet.dll = SSH.NET\Renci.SshNet.dll
+		SSH.NET\Renci.SshNet.xml = SSH.NET\Renci.SshNet.xml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
