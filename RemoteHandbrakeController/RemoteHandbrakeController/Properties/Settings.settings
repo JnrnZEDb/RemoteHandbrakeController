@@ -17,5 +17,14 @@
     <Setting Name="OUTPUT_DIRECTORY" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="LOCAL_WINDOWS_MODE" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LOCAL_INPUT" Type="System.String" Scope="User">
+      <Value Profile="(Default)">H:\\</Value>
+    </Setting>
+    <Setting Name="LOCAL_OUTPUT" Type="System.String" Scope="User">
+      <Value Profile="(Default)">E:\\Libraries\\Videos</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

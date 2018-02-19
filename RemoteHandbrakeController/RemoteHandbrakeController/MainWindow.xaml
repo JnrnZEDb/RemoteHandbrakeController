@@ -12,41 +12,30 @@
 				<MenuItem Header="_Config" Click="mnuConfig_Click"/>
 				<Separator/>
 				<MenuItem Header="_Exit" Click="mnuExit_Click"/>
+				<MenuItem Header="_About" Click="mnuAbout_Click"/>
+			</MenuItem>
+			<MenuItem Header="_Connection">
+				<MenuItem Header="_Connect" Click="mnuConnect_Click"/>
+				<Separator/>
+				<MenuItem Header="_Disconnect" Click="mnuDisconnect_Click"/>
 			</MenuItem>
 		</Menu>
-			<Grid Background="DimGray">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="200"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
-
-			<Grid Grid.Column="0">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="20"/>
-					<RowDefinition Height="50"/>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-			
-
-
-
-				<Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Content="Select Library" FontSize="20" FontWeight="Bold"/>
-				<Button Name="btnMovies" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Movies" FontSize="15" Width="100" Height="50" Click="BtnMovies_Clicked"/>
-				<Button Name="btnTV" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="TV Shows" FontSize="15" Width="100" Height="50" Click="BtnTV_Clicked"/>
-				<Button Name="btnAnime" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Anime" FontSize="15" Width="100" Height="50" Click="BtnAnime_Clicked"/>
-			</Grid>
-
-			<Grid Grid.Column="1">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="40"/>
-				</Grid.RowDefinitions>
-				<TreeView Name="treeFiles" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-				<Button Name="btnEncode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Content="ENCODE SELECTED FILES" Click="BtnEncode_Click"/>
-			</Grid>
-
+		<Grid DockPanel.Dock="Bottom">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="20"/>
+			</Grid.RowDefinitions>
+			<Frame Name="MainFrame" Grid.Row="0" DockPanel.Dock="Bottom" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+			<StatusBar Grid.Row="1">
+				<StatusBarItem>
+					<TextBlock Name="txtConnectionStatus"/>
+				</StatusBarItem>
+				<Separator Width="2" />
+				<StatusBarItem>
+					<TextBlock Name="txtCurrentFile"/>
+				</StatusBarItem>
+			</StatusBar>
 		</Grid>
 	</DockPanel>
+	
 </Window>

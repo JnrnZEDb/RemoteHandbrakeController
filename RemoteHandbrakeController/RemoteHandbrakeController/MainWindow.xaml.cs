@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Configuration;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Renci.SshNet;
 
 
 namespace RemoteHandbrakeController
@@ -19,38 +22,50 @@ namespace RemoteHandbrakeController
 	{
 		List<FileInfo> lstFilesToBeEncoded = new List<FileInfo>();
 
+		/// <summary>
+		/// Shows connection status
+		/// </summary>
+		public bool IsConnected
+		{
+			get { return IsConnected; }
+			set
+			{
+				switch (value)
+				{
+					case true:
+						Dispatcher.Invoke(() => txtConnectionStatus.Text = String.Format("CONNECTED TO {0}", Properties.Settings.Default.PLEX_IP));
+						break;
+					case false:
+						Dispatcher.Invoke(() => txtConnectionStatus.Text = String.Format("NOT CONNECTED TO {0}", Properties.Settings.Default.PLEX_IP));
+						break;
+				}
+			}
+		}
+
 		public MainWindow()
 		{
+			Globals.client = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, Properties.Settings.Default.PASSWORD);
+
+			System.Timers.Timer timerStatus = new System.Timers.Timer();
+			timerStatus.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+			timerStatus.Interval = 2000;
+			timerStatus.Enabled = true;
+
+			MediaSelectionPage mediaSelectionPage = new MediaSelectionPage();
 			InitializeComponent();
-		}
-
-		private void BtnMovies_Clicked(object sender, RoutedEventArgs e)
-		{
-			ListDirectory(treeFiles, String.Format("{0}Movies", Properties.Settings.Default.INPUT_DIRECTORY));
-		}
-
-		private void BtnTV_Clicked(object sender, RoutedEventArgs e)
-		{
-			ListDirectory(treeFiles, String.Format("{0}TV Shows", Properties.Settings.Default.INPUT_DIRECTORY));
-		}
-
-		private void BtnAnime_Clicked(object sender, RoutedEventArgs e)
-		{
-			ListDirectory(treeFiles, String.Format("{0}Anime", Properties.Settings.Default.INPUT_DIRECTORY));
-		}
-
-		private void BtnEncode_Click(object sender, RoutedEventArgs e)
-		{
-			lstFilesToBeEncoded.Clear();
-			FindChecked((TreeViewItem)treeFiles.Items.GetItemAt(0));
-			EncodeWindow wndEncode = new EncodeWindow(lstFilesToBeEncoded);
-			wndEncode.Show();
+			MainFrame.Navigate(mediaSelectionPage);
 		}
 
 		private void mnuConfig_Click(object sender, RoutedEventArgs e)
 		{
 			Config wndConfig = new Config();
 			wndConfig.Show();
+		}
+
+		private void mnuAbout_Click(object sender, RoutedEventArgs e)
+		{
+			About wndAbout = new About();
+			wndAbout.Show();
 		}
 
 		private void mnuExit_Click(object sender, RoutedEventArgs e)
@@ -60,68 +75,23 @@ namespace RemoteHandbrakeController
 			return;
 		}
 
-		/// <summary>
-		/// Fills TreeView with files from specified directory
-		/// </summary>
-		/// <param name="treeView"></param>
-		/// <param name="path"></param>
-		private void ListDirectory(TreeView treeView, string path)
+		private void mnuConnect_Click(object sender, RoutedEventArgs e)
 		{
-			treeView.Items.Clear();
-			var rootDirectoryInfo = new DirectoryInfo(path);
-			treeView.Items.Add(CreateDirectoryNode(rootDirectoryInfo));
+			Globals.ConnectToServer(Globals.client);
 		}
 
-		/// <summary>
-		/// Recursively builds treeView
-		/// </summary>
-		/// <param name="directoryInfo"></param>
-		/// <returns></returns>
-		private static TreeViewItem CreateDirectoryNode(DirectoryInfo directoryInfo)
+		private void mnuDisconnect_Click(object sender, RoutedEventArgs e)
 		{
-			var directoryNode = new TreeViewItem
-			{
-				Header = directoryInfo.Name
-			};
-			foreach (var directory in directoryInfo.GetDirectories())
-			{
-				directoryNode.Items.Add(CreateDirectoryNode(directory));
-			}
-			foreach (var file in directoryInfo.GetFiles("*.mkv"))
-			{
-				directoryNode.Items.Add(new TreeViewItem
-				{
-					Header = new CheckBox()
-					{
-						Content = file,
-					},
-					
-				});
-			}
-				
-			return directoryNode;
+			Globals.DisconnectFromServer(Globals.client);
 		}
 
-		/// <summary>
-		/// Gets all checked files from TreeViewItem
-		/// </summary>
-		/// <param name="treeViewFile"></param>
-		private void FindChecked(TreeViewItem treeViewFile)
+		private void OnTimedEvent(object source, ElapsedEventArgs e)
 		{
-			foreach (TreeViewItem file in treeViewFile.Items)
-			{
-				if (file.Header is CheckBox fileCheckBox)
-				{
-					fileCheckBox = (CheckBox)file.Header;
-					if (fileCheckBox.IsChecked.Value)
-					{
-						FileInfo checkedFile = (FileInfo)fileCheckBox.Content;
-						lstFilesToBeEncoded.Add(checkedFile);
-					}
-				}
-				FindChecked(file);
-			}
+			IsConnected = Globals.client.IsConnected;
+			if (Globals.currentFileBeingEncoded != String.Empty) Dispatcher.Invoke(() => txtCurrentFile.Text = string.Format("CURRENTLY ENCODING {0}", Globals.currentFileBeingEncoded));
+			else Dispatcher.Invoke(() => txtCurrentFile.Text = String.Empty);
 		}
-
+			
+			
 	}
 }

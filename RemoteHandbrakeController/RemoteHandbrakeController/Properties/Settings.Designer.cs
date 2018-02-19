@@ -82,5 +82,41 @@ namespace RemoteHandbrakeController.Properties {
                 this["OUTPUT_DIRECTORY"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LOCAL_WINDOWS_MODE {
+            get {
+                return ((bool)(this["LOCAL_WINDOWS_MODE"]));
+            }
+            set {
+                this["LOCAL_WINDOWS_MODE"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("H:\\\\")]
+        public string LOCAL_INPUT {
+            get {
+                return ((string)(this["LOCAL_INPUT"]));
+            }
+            set {
+                this["LOCAL_INPUT"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("E:\\\\Libraries\\\\Videos")]
+        public string LOCAL_OUTPUT {
+            get {
+                return ((string)(this["LOCAL_OUTPUT"]));
+            }
+            set {
+                this["LOCAL_OUTPUT"] = value;
+            }
+        }
     }
 }
