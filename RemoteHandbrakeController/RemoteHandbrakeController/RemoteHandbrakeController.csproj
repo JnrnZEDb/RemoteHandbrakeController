@@ -39,6 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -86,7 +87,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EncodePage..xaml">
+    <Page Include="EncodePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -104,8 +105,8 @@
     <Compile Include="Config.xaml.cs">
       <DependentUpon>Config.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EncodePage..xaml.cs">
-      <DependentUpon>EncodePage..xaml</DependentUpon>
+    <Compile Include="EncodePage.xaml.cs">
+      <DependentUpon>EncodePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Globals.cs" />
     <Compile Include="HandbrakeCommand.cs" />

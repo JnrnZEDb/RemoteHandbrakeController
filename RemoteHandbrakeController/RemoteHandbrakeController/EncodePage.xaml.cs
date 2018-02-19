@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -10,12 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Diagnostics;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 
@@ -52,10 +46,10 @@ namespace RemoteHandbrakeController
 		}
 
 		/// <summary>
-		/// Runs command and prints output to window
+		/// Runs command and prints output to window if talking to Debian Linux
 		/// </summary>
 		/// <param name="command"></param>
-		private bool DoCommand(string command)
+		private bool DoLinuxCommand(string command)
 		{
 			Dispatcher.BeginInvoke(new Action(delegate
 			{
@@ -87,6 +81,44 @@ namespace RemoteHandbrakeController
 		}
 
 		/// <summary>
+		/// Runs command and prints output to window if talking to Windows
+		/// </summary>
+		/// <param name="command"></param>
+		private bool DoWindowsCommand(string command)
+		{
+			string arguments = command.Remove(0, 12);
+			Dispatcher.BeginInvoke(new Action(delegate
+			{
+				txtOutput.Text += String.Format("{0}\n", command);
+			}));
+			try
+			{
+				Process p = new Process();
+				p.StartInfo.FileName = "cmd.exe";
+				p.StartInfo.Arguments = "/C ping 192.168.1.12";
+				p.StartInfo.UseShellExecute = false;
+				p.StartInfo.RedirectStandardOutput = true;
+				p.StartInfo.RedirectStandardInput = true;
+				p.StartInfo.CreateNoWindow = true;
+				p.OutputDataReceived += (sender, args) => Dispatcher.BeginInvoke(new Action(delegate
+				{
+					txtOutput.Text += string.Format("{0}\n", args.Data);
+				}));
+
+				p.Start();
+				p.BeginOutputReadLine();
+				p.WaitForExit();
+				return true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(string.Format("ERROR: {0}", ex.Message), "ERROR", MessageBoxButton.OK);
+				return false;
+			}
+
+		}
+
+		/// <summary>
 		/// Goes through list of files and sends encode command
 		/// </summary>
 		private void EncodeFiles()
@@ -95,23 +127,50 @@ namespace RemoteHandbrakeController
 			{
 				Globals.currentFileBeingEncoded = lstFilesToEncode[i].Name;
 				HandbrakeCommand cmd = new HandbrakeCommand(lstFilesToEncode[i].FullName, BuildOutputString(lstFilesToEncode[i]));
-				//DoCommand(cmd.ToString());
-				if (!DoCommand("ping 192.168.1.12 -c 5"))
+				// WINDOWS MODE
+				if (Properties.Settings.Default.LOCAL_WINDOWS_MODE)
 				{
-					Dispatcher.BeginInvoke(new Action(delegate
+					//DoCommand(cmd.ToString());
+					if (!DoWindowsCommand(cmd.ToString()))
 					{
-						txtOutput.Text += String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name);
-					}));
-					break;
+						Dispatcher.BeginInvoke(new Action(delegate
+						{
+							txtOutput.Text += String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name);
+						}));
+						break;
+					}
+					else
+					{
+						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
+						{
+							lstFilesToEncode.RemoveAt(i);
+						}));
+						while (disOp.Status != DispatcherOperationStatus.Completed) ;
+					}
+
 				}
+				// LINUX MODE
 				else
 				{
-					DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
+					//DoCommand(cmd.ToString());
+					if (!DoLinuxCommand("ping 192.168.1.12 -c 5"))
 					{
-						lstFilesToEncode.RemoveAt(i);
-					}));
-					while (disOp.Status != DispatcherOperationStatus.Completed) ;
+						Dispatcher.BeginInvoke(new Action(delegate
+						{
+							txtOutput.Text += String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name);
+						}));
+						break;
+					}
+					else
+					{
+						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
+						{
+							lstFilesToEncode.RemoveAt(i);
+						}));
+						while (disOp.Status != DispatcherOperationStatus.Completed) ;
+					}
 				}
+				
 			}
 			Globals.currentFileBeingEncoded = String.Empty;
 		}
