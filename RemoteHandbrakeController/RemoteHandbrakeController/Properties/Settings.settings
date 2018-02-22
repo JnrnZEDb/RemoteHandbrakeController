@@ -24,7 +24,7 @@
       <Value Profile="(Default)">H:\\</Value>
     </Setting>
     <Setting Name="LOCAL_OUTPUT" Type="System.String" Scope="User">
-      <Value Profile="(Default)">E:\\Libraries\\Videos</Value>
+      <Value Profile="(Default)">E:\Libraries\Videos</Value>
     </Setting>
   </Settings>
 </SettingsFile>

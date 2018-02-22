@@ -109,7 +109,7 @@ namespace RemoteHandbrakeController.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\\\Libraries\\\\Videos")]
+        [global::System.Configuration.DefaultSettingValueAttribute("E:\\Libraries\\Videos")]
         public string LOCAL_OUTPUT {
             get {
                 return ((string)(this["LOCAL_OUTPUT"]));

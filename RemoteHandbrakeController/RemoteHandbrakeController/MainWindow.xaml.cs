@@ -58,8 +58,8 @@ namespace RemoteHandbrakeController
 
 		private void mnuConfig_Click(object sender, RoutedEventArgs e)
 		{
-			Config wndConfig = new Config();
-			wndConfig.Show();
+			ConfigurationPage pageConfig = new ConfigurationPage((Page)MainFrame.Content);
+			MainFrame.Navigate(pageConfig);
 		}
 
 		private void mnuAbout_Click(object sender, RoutedEventArgs e)

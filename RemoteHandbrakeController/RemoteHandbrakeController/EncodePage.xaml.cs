@@ -20,6 +20,9 @@ namespace RemoteHandbrakeController
 	/// </summary>
 	public partial class EncodePage : Page
 	{
+		private Process procWnds;
+		private bool bCurrentlyEncoding { get; set; } = false;
+
 		private ObservableCollection<FileInfo> _lstFilesToEncode;
 		public ObservableCollection<FileInfo> lstFilesToEncode
 		{
@@ -53,7 +56,7 @@ namespace RemoteHandbrakeController
 		{
 			Dispatcher.BeginInvoke(new Action(delegate
 			{
-				txtOutput.Text += String.Format("{0}\n", command);
+				txtOutput.AppendText(String.Format("{0}\n", command));
 			}));
 			try
 			{
@@ -67,7 +70,7 @@ namespace RemoteHandbrakeController
 					if (string.IsNullOrEmpty(result)) continue;
 					Dispatcher.BeginInvoke(new Action(delegate
 					{
-						txtOutput.Text += result;
+						txtOutput.AppendText(result);
 					}));
 				}
 				cmd.EndExecute(asynch);
@@ -89,25 +92,29 @@ namespace RemoteHandbrakeController
 			string arguments = command.Remove(0, 12);
 			Dispatcher.BeginInvoke(new Action(delegate
 			{
-				txtOutput.Text += String.Format("{0}\n", command);
+				txtOutput.AppendText(String.Format("{0}\n", command));
 			}));
 			try
 			{
-				Process p = new Process();
-				p.StartInfo.FileName = "cmd.exe";
-				p.StartInfo.Arguments = "/C ping 192.168.1.12";
-				p.StartInfo.UseShellExecute = false;
-				p.StartInfo.RedirectStandardOutput = true;
-				p.StartInfo.RedirectStandardInput = true;
-				p.StartInfo.CreateNoWindow = true;
-				p.OutputDataReceived += (sender, args) => Dispatcher.BeginInvoke(new Action(delegate
+				procWnds = new Process();
+				//p.StartInfo.FileName = "cmd.exe";
+				procWnds.StartInfo.FileName = "C:\\Program Files (x86)\\HandbrakeCLI\\HandbrakeCLI.exe";
+				//p.StartInfo.Arguments = "/C ping 192.168.1.12";
+				procWnds.StartInfo.Arguments = arguments;
+				procWnds.StartInfo.UseShellExecute = false;
+				procWnds.StartInfo.RedirectStandardOutput = true;
+				procWnds.StartInfo.RedirectStandardInput = true;
+				procWnds.StartInfo.CreateNoWindow = true;
+				procWnds.OutputDataReceived += (sender, args) => Dispatcher.BeginInvoke(new Action(delegate
 				{
-					txtOutput.Text += string.Format("{0}\n", args.Data);
+					txtOutput.AppendText(string.Format("{0}\n", args.Data));
+					txtOutput.ScrollToEnd();
 				}));
 
-				p.Start();
-				p.BeginOutputReadLine();
-				p.WaitForExit();
+				procWnds.Start();
+				procWnds.BeginOutputReadLine();
+				procWnds.WaitForExit();
+				procWnds = null;
 				return true;
 			}
 			catch (Exception ex)
@@ -123,6 +130,7 @@ namespace RemoteHandbrakeController
 		/// </summary>
 		private void EncodeFiles()
 		{
+			bCurrentlyEncoding = true;
 			for (int i = 0; i < lstFilesToEncode.Count;)
 			{
 				Globals.currentFileBeingEncoded = lstFilesToEncode[i].Name;
@@ -135,7 +143,8 @@ namespace RemoteHandbrakeController
 					{
 						Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.Text += String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name);
+							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name));
+							txtOutput.ScrollToEnd();
 						}));
 						break;
 					}
@@ -157,7 +166,8 @@ namespace RemoteHandbrakeController
 					{
 						Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.Text += String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name);
+							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name));
+							txtOutput.ScrollToEnd();
 						}));
 						break;
 					}
@@ -173,6 +183,7 @@ namespace RemoteHandbrakeController
 				
 			}
 			Globals.currentFileBeingEncoded = String.Empty;
+			bCurrentlyEncoding = false;
 		}
 
 		/// <summary>
@@ -188,7 +199,7 @@ namespace RemoteHandbrakeController
 			{
 				if (inputFile.FullName.Contains("Movies"))
 				{
-					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\Movies (Encoded)\\";
+					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\Movies (Encoded)\\" + inputFile.Name;
 				}
 				else if (inputFile.FullName.Contains("TV Shows"))
 				{
@@ -212,10 +223,23 @@ namespace RemoteHandbrakeController
 			return outputDir;
 		}
 
-		private void BtnStartEncode_Click(object sender, RoutedEventArgs e)
+		private void BtnStartStopEncode_Click(object sender, RoutedEventArgs e)
 		{
-			Thread childThread = new Thread(() => EncodeFiles());
-			childThread.Start();
+			if (!bCurrentlyEncoding)
+			{
+				btnStartStopEncode.Content = "STOP";
+				Thread childThread = new Thread(() => EncodeFiles());
+				childThread.Start();
+			}
+			else if (bCurrentlyEncoding)
+			{
+				btnStartStopEncode.Content = "START";
+				procWnds.Kill();
+				procWnds = null;
+				txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
+				txtOutput.ScrollToEnd();
+			}
+			
 		}
 
 		private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -225,6 +249,11 @@ namespace RemoteHandbrakeController
 			{
 				Globals.DisconnectFromServer(Globals.client);
 				MediaSelectionPage pageMediaSelection = new MediaSelectionPage();
+				if (procWnds != null)
+				{
+					procWnds.Kill();
+					procWnds = null;
+				}
 				NavigationService.Navigate(pageMediaSelection);
 			}
 		}

@@ -60,7 +60,7 @@ namespace RemoteHandbrakeController
 
 		public override string ToString()
 		{
-			return String.Format("HandBrakeCLI -i {0} -o {1} -f {2} --optimize -e {3} --encoder-preset fast --encoder-profile main -q {4} --pfr -r {5} -E {6} --mixdown {7} -B {8} -R Auto -D 0 --gain 0.0 --audio-fallback ac3 --auto-anamorphic -s {9}",
+			return String.Format(@"HandBrakeCLI -i ""{0}"" -o ""{1}"" -f {2} --optimize -e {3} --encoder-preset fast --encoder-profile main -q {4} --pfr -r {5} -E {6} --mixdown {7} -B {8} -R Auto -D 0 --gain 0.0 --audio-fallback ac3 --auto-anamorphic -s {9}",
 				m_strInputFile,
 				m_strOutputDir,
 				m_strOutputFormat,

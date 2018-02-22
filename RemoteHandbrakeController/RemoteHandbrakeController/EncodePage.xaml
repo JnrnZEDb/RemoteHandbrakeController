@@ -35,13 +35,12 @@
 						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
-					<Button Name="btnStartEncode" Grid.Column="0" Content="START" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="BtnStartEncode_Click"/>
+					<Button Name="btnStartStopEncode" Grid.Column="0" Content="START" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="BtnStartStopEncode_Click"/>
 					<Button Name="btnCancel" Grid.Column="1" Content="CANCEL" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btnCancel_Click"/>
 				</Grid>
 			</Grid>
-			<ScrollViewer Grid.Column="1">
-				<TextBox Name="txtOutput"  Background="Black" Foreground="White" FontFamily="Console" IsReadOnly="True"/>
-			</ScrollViewer>
+			<TextBox Name="txtOutput" Grid.Column="1"  Background="Black" IsReadOnly="True" Foreground="White" FontFamily="Console" ScrollViewer.CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+					 TextWrapping="Wrap" AcceptsReturn="True"/>
 		</Grid>
 	</DockPanel>
 </Page>

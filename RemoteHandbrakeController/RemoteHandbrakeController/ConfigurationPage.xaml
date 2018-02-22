@@ -1,0 +1,69 @@
+﻿<Page x:Class="RemoteHandbrakeController.ConfigurationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:properties="clr-namespace:RemoteHandbrakeController.Properties"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+      Title="ConfigurationPage">
+	<Grid Background="IndianRed">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="40"/>
+		</Grid.RowDefinitions>
+		<Grid Grid.Row="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="200"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="200"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Border BorderThickness="1" Grid.ColumnSpan="2" Grid.RowSpan="5" BorderBrush="Black"/>
+			<Border BorderThickness="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="5" BorderBrush="Black"/>
+
+			<!--USERNAME-->
+			<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Username" FontSize="24" FontWeight="Bold"></Label>
+			<TextBox Name="txtUsername" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" FontSize="18"  Text="{Binding Source={x:Static properties:Settings.Default}, Path=USERNAME, Mode=TwoWay}"></TextBox>
+			<!--PASSWORD-->
+			<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Password" FontSize="24" FontWeight="Bold"></Label>
+			<TextBox Name="txtPassword" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PASSWORD, Mode=TwoWay}"></TextBox>
+			<!--IP-->
+			<Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Plex IP" FontSize="24" FontWeight="Bold"></Label>
+			<TextBox Name="txtIP" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PLEX_IP, Mode=TwoWay}"></TextBox>
+			<!--INPUT-->
+			<Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Input" FontSize="24" FontWeight="Bold"></Label>
+			<TextBox Name="txtInput" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+			<!--OUTPUT-->
+			<Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Output" FontSize="24" FontWeight="Bold"></Label>
+			<TextBox Name="txtOutput" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+
+			<!--LOCAL_WINDOWS_MODE-->
+			<Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Local Windows Mode" FontSize="19" FontWeight="Bold" ></Label>
+			<CheckBox Name="chkLocalWindowsMode" Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Runs a Windows cmd (vs Linux) and uses local PC (127.0.0.1) for testing"  
+					  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_WINDOWS_MODE, Mode=TwoWay}">
+				<CheckBox.LayoutTransform>
+					<ScaleTransform ScaleX="2" ScaleY="2"/>
+				</CheckBox.LayoutTransform>
+			</CheckBox>
+
+		</Grid>
+		<Grid Grid.Row="1">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Button Name="btnApplyConfig" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="APPLY" Click="btnApplyConfig_Click"/>
+				<Button Name="btnBack" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="BACK" Click="btnBack_Click"/>
+			</Grid>
+		</Grid>
+	</Grid>
+</Page>
