@@ -26,5 +26,8 @@
     <Setting Name="LOCAL_OUTPUT" Type="System.String" Scope="User">
       <Value Profile="(Default)">E:\Libraries\Videos</Value>
     </Setting>
+    <Setting Name="LOCAL_HANDBRAKECLI_PATH" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files (x86)\</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

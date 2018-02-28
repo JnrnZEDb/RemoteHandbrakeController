@@ -98,7 +98,7 @@ namespace RemoteHandbrakeController
 			{
 				procWnds = new Process();
 				//p.StartInfo.FileName = "cmd.exe";
-				procWnds.StartInfo.FileName = "C:\\Program Files (x86)\\HandbrakeCLI\\HandbrakeCLI.exe";
+				procWnds.StartInfo.FileName = Properties.Settings.Default.LOCAL_HANDBRAKECLI_PATH;
 				//p.StartInfo.Arguments = "/C ping 192.168.1.12";
 				procWnds.StartInfo.Arguments = arguments;
 				procWnds.StartInfo.UseShellExecute = false;
@@ -152,6 +152,7 @@ namespace RemoteHandbrakeController
 					{
 						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
 						{
+							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING", lstFilesToEncode[i].Name));
 							lstFilesToEncode.RemoveAt(i);
 						}));
 						while (disOp.Status != DispatcherOperationStatus.Completed) ;

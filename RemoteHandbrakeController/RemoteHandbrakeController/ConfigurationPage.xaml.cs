@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 
 
 namespace RemoteHandbrakeController
@@ -39,6 +41,16 @@ namespace RemoteHandbrakeController
 		private void btnBack_Click(object sender, RoutedEventArgs e)
 		{
 			NavigationService.Navigate(pagePrevious);
+		}
+
+		private void btnHandbrakeCLI_Path_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog pathDialog = new OpenFileDialog();
+			pathDialog.Filter = "Executable (*.exe) | *.exe";
+			pathDialog.InitialDirectory = @"C:\";
+			var result = pathDialog.ShowDialog();
+
+			if (result == true) txtHandbrakeCLI_Path.Text = pathDialog.FileName;
 		}
 	}
 }

@@ -118,5 +118,17 @@ namespace RemoteHandbrakeController.Properties {
                 this["LOCAL_OUTPUT"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\")]
+        public string LOCAL_HANDBRAKECLI_PATH {
+            get {
+                return ((string)(this["LOCAL_HANDBRAKECLI_PATH"]));
+            }
+            set {
+                this["LOCAL_HANDBRAKECLI_PATH"] = value;
+            }
+        }
     }
 }
