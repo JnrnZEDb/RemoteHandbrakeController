@@ -11,10 +11,11 @@
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="40"/>
 			</Grid.RowDefinitions>
-			<GroupBox Grid.Row="0" Header="REMOTE/LINUX SETTINGS" FontSize="16" FontWeight="Bold" VerticalAlignment="Stretch">
+			<GroupBox Grid.Row="0" Header="REMOTE/LINUX SETTINGS" FontSize="16" FontWeight="Bold">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="40"/>
@@ -44,11 +45,9 @@
 					<TextBox Name="txtOutput" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
 				</Grid>
 			</GroupBox>
-			<GroupBox Grid.Row="1" Header="LOCAL/WINDOWS Settings" FontSize="16" FontWeight="Bold" VerticalAlignment="Stretch">
+			<GroupBox Grid.Row="1" Header="LOCAL/WINDOWS SETTINGS" FontSize="16" FontWeight="Bold">
 				<Grid>
 					<Grid.RowDefinitions>
-						<RowDefinition Height="40"/>
-						<RowDefinition Height="40"/>
 						<RowDefinition Height="40"/>
 						<RowDefinition Height="40"/>
 						<RowDefinition Height="40"/>
@@ -57,20 +56,40 @@
 						<ColumnDefinition Width="150"/>
 						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
+					<!--LOCAL HANDBRAKECLI LOCATION-->
+					<Button Name="btnHandbrakeCLI_Path" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="HB CLI Location" FontSize="18" FontWeight="Bold" Click="btnHandbrakeCLI_Path_Click"/>
+					<TextBox Name="txtHandbrakeCLI_Path" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_HANDBRAKECLI_PATH, Mode=TwoWay}"/>
+				</Grid>
+			</GroupBox>
+			<GroupBox Grid.Row="2" Header="GENERAL SETTINGS" FontSize="16" FontWeight="Bold">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
 					<!--LOCAL_WINDOWS_MODE-->
-					<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Set Local Mode" FontSize="19" FontWeight="Bold"/>
+					<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Local Mode" FontSize="19" FontWeight="Bold"/>
 					<CheckBox Name="chkLocalWindowsMode" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Runs a Windows cmd (vs Linux) and uses local PC (127.0.0.1) for testing"  
 					  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_WINDOWS_MODE, Mode=TwoWay}">
 						<CheckBox.LayoutTransform>
 							<ScaleTransform ScaleX="2" ScaleY="2"/>
 						</CheckBox.LayoutTransform>
 					</CheckBox>
-					<!--LOCAL HANDBRAKECLI LOCATION-->
-					<Button Name="btnHandbrakeCLI_Path" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="HB CLI Location" FontSize="18" FontWeight="Bold" Click="btnHandbrakeCLI_Path_Click"/>
-					<TextBox Name="txtHandbrakeCLI_Path" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_HANDBRAKECLI_PATH, Mode=TwoWay}"/>
+					<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Test Mode" FontSize="19" FontWeight="Bold"/>
+					<CheckBox Name="chkTestMode" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Will do a ping command instead of encoding for simple testing"  
+					  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=TEST_MODE, Mode=TwoWay}">
+						<CheckBox.LayoutTransform>
+							<ScaleTransform ScaleX="2" ScaleY="2"/>
+						</CheckBox.LayoutTransform>
+					</CheckBox>
 				</Grid>
+				
 			</GroupBox>
-			<Grid Grid.Row="2">
+			<Grid Grid.Row="3">
 				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*"/>

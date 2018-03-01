@@ -36,6 +36,10 @@
 				</StatusBarItem>
 				<Separator Width="2" />
 				<StatusBarItem>
+					<TextBlock Name="txtTestMode"/>
+				</StatusBarItem>
+				<Separator Width="2" />
+				<StatusBarItem>
 					<TextBlock Name="txtCurrentFile"/>
 				</StatusBarItem>
 			</StatusBar>

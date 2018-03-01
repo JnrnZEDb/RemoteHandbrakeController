@@ -29,5 +29,8 @@
     <Setting Name="LOCAL_HANDBRAKECLI_PATH" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files (x86)\</Value>
     </Setting>
+    <Setting Name="TEST_MODE" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

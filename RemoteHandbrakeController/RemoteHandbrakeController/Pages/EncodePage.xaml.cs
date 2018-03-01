@@ -59,6 +59,8 @@ namespace RemoteHandbrakeController
 		/// <param name="command"></param>
 		private bool DoLinuxCommand(string command)
 		{
+			if (Properties.Settings.Default.TEST_MODE) command = "ping 192.168.1.12 -c 5";
+
 			Dispatcher.BeginInvoke(new Action(delegate
 			{
 				txtOutput.AppendText(String.Format("{0}\n", command));
@@ -113,10 +115,17 @@ namespace RemoteHandbrakeController
 			try
 			{
 				procWnds = new Process();
-				//p.StartInfo.FileName = "cmd.exe";
-				procWnds.StartInfo.FileName = Properties.Settings.Default.LOCAL_HANDBRAKECLI_PATH;
-				//p.StartInfo.Arguments = "/C ping 192.168.1.12";
-				procWnds.StartInfo.Arguments = arguments;
+				if (Properties.Settings.Default.TEST_MODE)
+				{
+					procWnds.StartInfo.FileName = "cmd.exe";
+					procWnds.StartInfo.Arguments = "/C ping 192.168.1.12";
+				}
+				else
+				{
+					procWnds.StartInfo.FileName = Properties.Settings.Default.LOCAL_HANDBRAKECLI_PATH;
+					procWnds.StartInfo.Arguments = arguments;
+				}
+				
 				procWnds.StartInfo.UseShellExecute = false;
 				procWnds.StartInfo.RedirectStandardOutput = true;
 				procWnds.StartInfo.RedirectStandardInput = true;
@@ -190,8 +199,7 @@ namespace RemoteHandbrakeController
 				// LINUX MODE
 				else
 				{
-					//DoCommand(cmd.ToString());
-					if (!DoLinuxCommand("ping 192.168.1.12 -c 5"))
+					if (!DoLinuxCommand(cmd.ToString()))
 					{
 						Dispatcher.BeginInvoke(new Action(delegate
 						{
