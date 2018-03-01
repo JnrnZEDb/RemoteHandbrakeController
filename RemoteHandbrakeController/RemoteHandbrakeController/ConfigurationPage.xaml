@@ -8,69 +8,79 @@
       d:DesignHeight="600" d:DesignWidth="800"
       Title="ConfigurationPage">
 	<Grid Background="Gray">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="40"/>
-		</Grid.RowDefinitions>
-		<Grid Grid.Row="0">
+		<Grid>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="50"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="40"/>
 			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="200"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="200"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
-			<Border BorderThickness="1" Grid.ColumnSpan="2" Grid.RowSpan="7" BorderBrush="Black"/>
-			<Border BorderThickness="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="7" BorderBrush="Black"/>
-
-			<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Content="REMOTE/LINUX SETTINGS"/>
-			<!--USERNAME-->
-			<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Username" FontSize="24" FontWeight="Bold"></Label>
-			<TextBox Name="txtUsername" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" FontSize="18"  Text="{Binding Source={x:Static properties:Settings.Default}, Path=USERNAME, Mode=TwoWay}"></TextBox>
-			<!--PASSWORD-->
-			<Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Password" FontSize="24" FontWeight="Bold"></Label>
-			<TextBox Name="txtPassword" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PASSWORD, Mode=TwoWay}"></TextBox>
-			<!--IP-->
-			<Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Plex IP" FontSize="24" FontWeight="Bold"></Label>
-			<TextBox Name="txtIP" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PLEX_IP, Mode=TwoWay}"></TextBox>
-			<!--INPUT-->
-			<Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Input" FontSize="24" FontWeight="Bold"></Label>
-			<TextBox Name="txtInput" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
-			<!--OUTPUT-->
-			<Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Output" FontSize="24" FontWeight="Bold"></Label>
-			<TextBox Name="txtOutput" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
-
-			<!--LOCAL_WINDOWS_MODE-->
-			<Label Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Content="LOCAL/WINDOWS SETTINGS"/>
-			<Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Local Windows Mode" FontSize="19" FontWeight="Bold" ></Label>
-			<CheckBox Name="chkLocalWindowsMode" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Runs a Windows cmd (vs Linux) and uses local PC (127.0.0.1) for testing"  
+			<GroupBox Grid.Row="0" Header="REMOTE/LINUX SETTINGS" FontSize="16" FontWeight="Bold" VerticalAlignment="Stretch">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<!--USERNAME-->
+					<Label  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Username" FontSize="24" FontWeight="Bold"></Label>
+					<TextBox Name="txtUsername" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18"  Text="{Binding Source={x:Static properties:Settings.Default}, Path=USERNAME, Mode=TwoWay}"></TextBox>
+					<!--PASSWORD-->
+					<Label  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Password" FontSize="24" FontWeight="Bold"></Label>
+					<TextBox Name="txtPassword" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PASSWORD, Mode=TwoWay}"></TextBox>
+					<!--IP-->
+					<Label  Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Plex IP" FontSize="24" FontWeight="Bold"></Label>
+					<TextBox Name="txtIP" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PLEX_IP, Mode=TwoWay}"></TextBox>
+					<!--INPUT-->
+					<Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Input" FontSize="24" FontWeight="Bold"></Label>
+					<TextBox Name="txtInput" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+					<!--OUTPUT-->
+					<Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Output" FontSize="24" FontWeight="Bold"></Label>
+					<TextBox Name="txtOutput" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+				</Grid>
+			</GroupBox>
+			<GroupBox Grid.Row="1" Header="LOCAL/WINDOWS Settings" FontSize="16" FontWeight="Bold" VerticalAlignment="Stretch">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<!--LOCAL_WINDOWS_MODE-->
+					<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Set Local Mode" FontSize="19" FontWeight="Bold"/>
+					<CheckBox Name="chkLocalWindowsMode" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Runs a Windows cmd (vs Linux) and uses local PC (127.0.0.1) for testing"  
 					  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_WINDOWS_MODE, Mode=TwoWay}">
-				<CheckBox.LayoutTransform>
-					<ScaleTransform ScaleX="2" ScaleY="2"/>
-				</CheckBox.LayoutTransform>
-			</CheckBox>
-			<!--LOCAL HANDBRAKECLI LOCATION-->
-			<Button Name="btnHandbrakeCLI_Path" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="HandbrakeCLI Location" FontSize="17" FontWeight="Bold" Click="btnHandbrakeCLI_Path_Click"/>
-			<TextBox Name="txtHandbrakeCLI_Path" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" FontSize="14" Text="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_HANDBRAKECLI_PATH, Mode=TwoWay}"></TextBox>
-
-		</Grid>
-		<Grid Grid.Row="1">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="*"/>
-				</Grid.ColumnDefinitions>
-				<Button Name="btnApplyConfig" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="APPLY" Click="btnApplyConfig_Click"/>
-				<Button Name="btnBack" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="BACK" Click="btnBack_Click"/>
+						<CheckBox.LayoutTransform>
+							<ScaleTransform ScaleX="2" ScaleY="2"/>
+						</CheckBox.LayoutTransform>
+					</CheckBox>
+					<!--LOCAL HANDBRAKECLI LOCATION-->
+					<Button Name="btnHandbrakeCLI_Path" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="HB CLI Location" FontSize="18" FontWeight="Bold" Click="btnHandbrakeCLI_Path_Click"/>
+					<TextBox Name="txtHandbrakeCLI_Path" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_HANDBRAKECLI_PATH, Mode=TwoWay}"/>
+				</Grid>
+			</GroupBox>
+			<Grid Grid.Row="2">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Button Name="btnApplyConfig" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="APPLY" Click="btnApplyConfig_Click"/>
+					<Button Name="btnBack" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="BACK" Click="btnBack_Click"/>
+				</Grid>
 			</Grid>
 		</Grid>
+		
 	</Grid>
 </Page>

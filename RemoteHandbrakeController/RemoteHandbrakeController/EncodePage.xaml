@@ -39,8 +39,16 @@
 					<Button Name="btnCancel" Grid.Column="1" Content="CANCEL" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btnCancel_Click"/>
 				</Grid>
 			</Grid>
-			<TextBox Name="txtOutput" Grid.Column="1"  Background="Black" IsReadOnly="True" Foreground="White" FontFamily="Console" ScrollViewer.CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+			<Grid Grid.Column="1">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="30"/>
+				</Grid.RowDefinitions>
+				<TextBox Name="txtOutput" Grid.Row="0" Background="Black" IsReadOnly="True" Foreground="White" FontFamily="Console" ScrollViewer.CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
 					 TextWrapping="Wrap" AcceptsReturn="True"/>
+				<ProgressBar Name="prgEncode" Grid.Row="1" Maximum="100"/>
+			</Grid>
+			
 		</Grid>
 	</DockPanel>
 </Page>

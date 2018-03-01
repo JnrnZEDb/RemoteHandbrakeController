@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Threading;
 using System.Windows.Controls;
@@ -70,7 +71,17 @@ namespace RemoteHandbrakeController
 					if (string.IsNullOrEmpty(result)) continue;
 					Dispatcher.BeginInvoke(new Action(delegate
 					{
-						txtOutput.AppendText(result);
+						if (result != null)
+						{
+							if (Regex.Match(result, @"\d+(?:\.\d+) %").Success)
+							{
+								string strProgress = Regex.Match(result, @"\d+(?:\.\d+) %").Value;
+								double dProgress = Convert.ToDouble(strProgress.Substring(0, 4));
+								prgEncode.Value = dProgress;
+							}
+							txtOutput.AppendText(result);
+							txtOutput.ScrollToEnd();
+						}
 					}));
 				}
 				cmd.EndExecute(asynch);
@@ -107,8 +118,17 @@ namespace RemoteHandbrakeController
 				procWnds.StartInfo.CreateNoWindow = true;
 				procWnds.OutputDataReceived += (sender, args) => Dispatcher.BeginInvoke(new Action(delegate
 				{
-					txtOutput.AppendText(string.Format("{0}\n", args.Data));
-					txtOutput.ScrollToEnd();
+					if (args.Data != null)
+					{
+						if (Regex.Match(args.Data, @"\d+(?:\.\d+) %").Success)
+						{
+							string strProgress = Regex.Match(args.Data, @"\d+(?:\.\d+) %").Value;
+							double dProgress = Convert.ToDouble(strProgress.Substring(0, 4));
+							prgEncode.Value = dProgress;
+						}
+						txtOutput.AppendText(string.Format("{0}\n", args.Data));
+						txtOutput.ScrollToEnd();
+					}	
 				}));
 
 				procWnds.Start();
@@ -154,6 +174,7 @@ namespace RemoteHandbrakeController
 						{
 							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING", lstFilesToEncode[i].Name));
 							lstFilesToEncode.RemoveAt(i);
+							prgEncode.Value = 0;
 						}));
 						while (disOp.Status != DispatcherOperationStatus.Completed) ;
 					}
@@ -185,6 +206,7 @@ namespace RemoteHandbrakeController
 			}
 			Globals.currentFileBeingEncoded = String.Empty;
 			bCurrentlyEncoding = false;
+			prgEncode.Value = 0;
 		}
 
 		/// <summary>
@@ -239,6 +261,7 @@ namespace RemoteHandbrakeController
 				procWnds = null;
 				txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
 				txtOutput.ScrollToEnd();
+				prgEncode.Value = 0;
 			}
 			
 		}
@@ -248,6 +271,7 @@ namespace RemoteHandbrakeController
 			var response = MessageBox.Show("Are you sure you want to cancel?", "CANCEL", MessageBoxButton.YesNo);
 			if (response == MessageBoxResult.Yes)
 			{
+				prgEncode.Value = 0;
 				Globals.DisconnectFromServer(Globals.client);
 				MediaSelectionPage pageMediaSelection = new MediaSelectionPage();
 				if (procWnds != null)
