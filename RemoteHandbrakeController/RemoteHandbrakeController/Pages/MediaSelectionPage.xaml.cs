@@ -24,6 +24,7 @@ namespace RemoteHandbrakeController
 			InitializeComponent();
 		}
 
+		#region BUTTON_CLICKS
 		private void BtnMovies_Clicked(object sender, RoutedEventArgs e)
 		{
 			ListDirectory(treeFiles, String.Format("{0}Movies", Properties.Settings.Default.INPUT_DIRECTORY));
@@ -56,8 +57,9 @@ namespace RemoteHandbrakeController
 			}
 			
 		}
+		#endregion
 
-
+		#region FUNCTIONS
 		/// <summary>
 		/// Fills TreeView with files from specified directory
 		/// </summary>
@@ -120,5 +122,6 @@ namespace RemoteHandbrakeController
 				FindChecked(file);
 			}
 		}
+		#endregion
 	}
 }

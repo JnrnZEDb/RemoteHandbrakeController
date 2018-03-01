@@ -23,6 +23,7 @@ namespace RemoteHandbrakeController
 			InitializeComponent();
 		}
 
+		#region BUTTON_CLICKS
 		private void btnApplyConfig_Click(object sender, RoutedEventArgs e)
 		{
 			try
@@ -52,5 +53,6 @@ namespace RemoteHandbrakeController
 
 			if (result == true) txtHandbrakeCLI_Path.Text = pathDialog.FileName;
 		}
+		#endregion
 	}
 }

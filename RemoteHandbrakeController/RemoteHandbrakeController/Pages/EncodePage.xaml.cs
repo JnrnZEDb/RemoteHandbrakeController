@@ -52,6 +52,7 @@ namespace RemoteHandbrakeController
 			Globals.ConnectToServer(Globals.client);
 		}
 
+		#region DO_COMMANDS
 		/// <summary>
 		/// Runs command and prints output to window if talking to Debian Linux
 		/// </summary>
@@ -132,7 +133,7 @@ namespace RemoteHandbrakeController
 						}
 						txtOutput.AppendText(string.Format("{0}\n", args.Data));
 						txtOutput.ScrollToEnd();
-					}	
+					}
 				}));
 
 				procWnds.Start();
@@ -148,7 +149,9 @@ namespace RemoteHandbrakeController
 			}
 
 		}
+		#endregion
 
+		#region FUNCTIONS
 		/// <summary>
 		/// Goes through list of files and sends encode command
 		/// </summary>
@@ -279,7 +282,9 @@ namespace RemoteHandbrakeController
 			txtOutput.ScrollToEnd();
 			prgEncode.Value = 0;
 		}
+		#endregion
 
+		#region BUTTON_CLICKS
 		private void BtnStartStopEncode_Click(object sender, RoutedEventArgs e)
 		{
 			if (lstFilesToEncode.Count != 0)
@@ -315,5 +320,6 @@ namespace RemoteHandbrakeController
 				NavigationService.Navigate(pageMediaSelection);
 			}
 		}
+		#endregion
 	}
 }

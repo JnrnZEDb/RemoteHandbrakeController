@@ -42,13 +42,14 @@ namespace RemoteHandbrakeController
 			}
 		}
 
+		/// <summary> Constructor</summary>
 		public MainWindow()
 		{
 			Globals.client = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, Properties.Settings.Default.PASSWORD);
 
 			System.Timers.Timer timerStatus = new System.Timers.Timer();
 			timerStatus.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-			timerStatus.Interval = 2000;
+			timerStatus.Interval = 1500;
 			timerStatus.Enabled = true;
 
 			MediaSelectionPage mediaSelectionPage = new MediaSelectionPage();
@@ -56,6 +57,7 @@ namespace RemoteHandbrakeController
 			MainFrame.Navigate(mediaSelectionPage);
 		}
 
+		#region MENU_CLICKS
 		private void mnuConfig_Click(object sender, RoutedEventArgs e)
 		{
 			ConfigurationPage pageConfig = new ConfigurationPage((Page)MainFrame.Content);
@@ -84,12 +86,21 @@ namespace RemoteHandbrakeController
 		{
 			Globals.DisconnectFromServer(Globals.client);
 		}
+		#endregion
 
+		/// <summary>
+		/// Status Timer Event
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="e"></param>
 		private void OnTimedEvent(object source, ElapsedEventArgs e)
 		{
 			IsConnected = Globals.client.IsConnected;
 			if (Globals.currentFileBeingEncoded != String.Empty) Dispatcher.Invoke(() => txtCurrentFile.Text = string.Format("CURRENTLY ENCODING {0}", Globals.currentFileBeingEncoded));
 			else Dispatcher.Invoke(() => txtCurrentFile.Text = String.Empty);
+
+			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE) Dispatcher.Invoke(() => txtMode.Text = "LOCAL WINDOWS MODE");
+			else Dispatcher.Invoke(() => txtMode.Text = "REMOTE LINUX MODE");
 		}
 			
 			
