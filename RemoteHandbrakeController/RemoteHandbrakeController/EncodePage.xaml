@@ -36,7 +36,7 @@
 						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
 					<Button Name="btnStartStopEncode" Grid.Column="0" Content="START" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="BtnStartStopEncode_Click"/>
-					<Button Name="btnCancel" Grid.Column="1" Content="CANCEL" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btnCancel_Click"/>
+					<Button Name="btnCancel" Grid.Column="1" Content="BACK/CANCEL" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btnCancel_Click"/>
 				</Grid>
 			</Grid>
 			<Grid Grid.Column="1">

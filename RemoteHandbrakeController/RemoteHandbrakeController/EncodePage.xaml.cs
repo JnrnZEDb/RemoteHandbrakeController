@@ -21,8 +21,11 @@ namespace RemoteHandbrakeController
 	/// </summary>
 	public partial class EncodePage : Page
 	{
-		private Process procWnds;
 		private bool bCurrentlyEncoding { get; set; } = false;
+		private bool bStopEncodePressed { get; set; } = false;
+		private Process procWnds;
+		private SshCommand cmdCurrent;
+		private Thread thrdEncode;
 
 		private ObservableCollection<FileInfo> _lstFilesToEncode;
 		public ObservableCollection<FileInfo> lstFilesToEncode
@@ -61,9 +64,9 @@ namespace RemoteHandbrakeController
 			}));
 			try
 			{
-				var cmd = Globals.client.CreateCommand(command);
-				var asynch = cmd.BeginExecute();
-				var reader = new StreamReader(cmd.OutputStream);
+				cmdCurrent = Globals.client.CreateCommand(command);
+				var asynch = cmdCurrent.BeginExecute();
+				var reader = new StreamReader(cmdCurrent.OutputStream);
 
 				while (!asynch.IsCompleted)
 				{
@@ -84,7 +87,8 @@ namespace RemoteHandbrakeController
 						}
 					}));
 				}
-				cmd.EndExecute(asynch);
+				cmdCurrent.EndExecute(asynch);
+				cmdCurrent = null;
 				return true;
 			}
 			catch (Exception ex)
@@ -163,7 +167,7 @@ namespace RemoteHandbrakeController
 					{
 						Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name));
+							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING\n", lstFilesToEncode[i].Name));
 							txtOutput.ScrollToEnd();
 						}));
 						break;
@@ -172,8 +176,8 @@ namespace RemoteHandbrakeController
 					{
 						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING", lstFilesToEncode[i].Name));
-							lstFilesToEncode.RemoveAt(i);
+							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING\n", lstFilesToEncode[i].Name));
+							if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
 							prgEncode.Value = 0;
 						}));
 						while (disOp.Status != DispatcherOperationStatus.Completed) ;
@@ -188,7 +192,7 @@ namespace RemoteHandbrakeController
 					{
 						Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING", lstFilesToEncode[i].Name));
+							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING\n", lstFilesToEncode[i].Name));
 							txtOutput.ScrollToEnd();
 						}));
 						break;
@@ -197,16 +201,23 @@ namespace RemoteHandbrakeController
 					{
 						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
 						{
-							lstFilesToEncode.RemoveAt(i);
+							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING\n", lstFilesToEncode[i].Name));
+							if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
+							prgEncode.Value = 0;
 						}));
 						while (disOp.Status != DispatcherOperationStatus.Completed) ;
 					}
 				}
-				
+				if (bStopEncodePressed) Dispatcher.BeginInvoke(new Action(() => EndEncodeTask()));
 			}
 			Globals.currentFileBeingEncoded = String.Empty;
 			bCurrentlyEncoding = false;
-			prgEncode.Value = 0;
+			Dispatcher.BeginInvoke(new Action(() =>
+			{
+				btnCancel.IsEnabled = true;
+				btnStartStopEncode.Content = "START";
+				prgEncode.Value = 0;
+			}));
 		}
 
 		/// <summary>
@@ -222,19 +233,21 @@ namespace RemoteHandbrakeController
 			{
 				if (inputFile.FullName.Contains("Movies"))
 				{
-					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\Movies (Encoded)\\" + inputFile.Name;
+					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\Movies (Encoded)\\" + inputFile.Name.Replace("mkv", "m4v");
 				}
 				else if (inputFile.FullName.Contains("TV Shows"))
 				{
 					string[] folders = inputFile.FullName.Split('\\');
 					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\TV Shows (Encoded)\\" + folders[folders.Length - 3] + "\\" + folders[folders.Length - 2];
 					Directory.CreateDirectory(outputDir);
+					outputDir += "\\" + inputFile.Name.Replace("mkv", "m4v");
 				}
 				else if (inputFile.FullName.Contains("Anime"))
 				{
 					string[] folders = inputFile.FullName.Split('\\');
 					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\Anime (Encoded)\\" + folders[folders.Length - 3] + "\\" + folders[folders.Length - 2];
 					Directory.CreateDirectory(outputDir);
+					outputDir += "\\" + inputFile.Name.Replace("mkv", "m4v");
 				}
 
 			}
@@ -246,24 +259,44 @@ namespace RemoteHandbrakeController
 			return outputDir;
 		}
 
-		private void BtnStartStopEncode_Click(object sender, RoutedEventArgs e)
+		/// <summary> Handles encode task cancellation</summary>
+		private void EndEncodeTask()
 		{
-			if (!bCurrentlyEncoding)
+			if (cmdCurrent != null)
 			{
-				btnStartStopEncode.Content = "STOP";
-				Thread childThread = new Thread(() => EncodeFiles());
-				childThread.Start();
+				cmdCurrent.CancelAsync();
+				cmdCurrent = null;
 			}
-			else if (bCurrentlyEncoding)
+			if (procWnds != null)
 			{
-				btnStartStopEncode.Content = "START";
 				procWnds.Kill();
 				procWnds = null;
-				txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
-				txtOutput.ScrollToEnd();
-				prgEncode.Value = 0;
 			}
-			
+			lstFilesToEncode.Clear();
+			bCurrentlyEncoding = false;
+			btnStartStopEncode.Content = "START";
+			txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
+			txtOutput.ScrollToEnd();
+			prgEncode.Value = 0;
+		}
+
+		private void BtnStartStopEncode_Click(object sender, RoutedEventArgs e)
+		{
+			if (lstFilesToEncode.Count != 0)
+			{
+				if (!bCurrentlyEncoding)
+				{
+					btnStartStopEncode.Content = "STOP";
+					btnCancel.IsEnabled = false;
+					thrdEncode = new Thread(() => EncodeFiles());
+					thrdEncode.Start();
+				}
+				else if (bCurrentlyEncoding)
+				{
+					btnCancel.IsEnabled = true;
+					EndEncodeTask();
+				}
+			}	
 		}
 
 		private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -271,7 +304,7 @@ namespace RemoteHandbrakeController
 			var response = MessageBox.Show("Are you sure you want to cancel?", "CANCEL", MessageBoxButton.YesNo);
 			if (response == MessageBoxResult.Yes)
 			{
-				prgEncode.Value = 0;
+				EndEncodeTask();
 				Globals.DisconnectFromServer(Globals.client);
 				MediaSelectionPage pageMediaSelection = new MediaSelectionPage();
 				if (procWnds != null)
