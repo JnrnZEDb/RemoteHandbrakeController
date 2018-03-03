@@ -102,8 +102,8 @@ namespace RemoteHandbrakeController
 			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE) Dispatcher.Invoke(() => txtMode.Text = "LOCAL WINDOWS MODE");
 			else Dispatcher.Invoke(() => txtMode.Text = "REMOTE LINUX MODE");
 
-			if (Properties.Settings.Default.TEST_MODE) Dispatcher.Invoke(() => txtMode.Text = "TEST MODE");
-			else Dispatcher.Invoke(() => txtMode.Text = "ENCODE MODE");
+			if (Properties.Settings.Default.TEST_MODE) Dispatcher.Invoke(() => txtTestMode.Text = "TEST MODE");
+			else Dispatcher.Invoke(() => txtTestMode.Text = "ENCODE MODE");
 		}
 			
 			
