@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteHandbrakeController", "RemoteHandbrakeController\RemoteHandbrakeController.csproj", "{1E5D514C-6FFF-4A26-8FBB-C3F6C3CECABB}"
 EndProject
@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SSH.NET", "SSH.NET", "{B80F
 		SSH.NET\Renci.SshNet.dll = SSH.NET\Renci.SshNet.dll
 		SSH.NET\Renci.SshNet.xml = SSH.NET\Renci.SshNet.xml
 	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RemoteHandbrakeControllerInstaller", "RemoteHandbrakeControllerInstaller\RemoteHandbrakeControllerInstaller.vdproj", "{4BC8868C-605F-4193-99B7-75D445DE692F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,9 @@ Global
 		{1E5D514C-6FFF-4A26-8FBB-C3F6C3CECABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E5D514C-6FFF-4A26-8FBB-C3F6C3CECABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E5D514C-6FFF-4A26-8FBB-C3F6C3CECABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BC8868C-605F-4193-99B7-75D445DE692F}.Debug|Any CPU.ActiveCfg = Debug
+		{4BC8868C-605F-4193-99B7-75D445DE692F}.Release|Any CPU.ActiveCfg = Release
+		{4BC8868C-605F-4193-99B7-75D445DE692F}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
