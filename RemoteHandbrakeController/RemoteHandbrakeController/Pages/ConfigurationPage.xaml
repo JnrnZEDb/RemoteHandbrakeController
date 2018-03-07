@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:properties="clr-namespace:RemoteHandbrakeController.Properties"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="800"
+      d:DesignHeight="800" d:DesignWidth="800"
       Title="ConfigurationPage">
 	<Grid Background="Gray">
 		<Grid>
@@ -25,24 +25,26 @@
 						<RowDefinition Height="40"/>
 					</Grid.RowDefinitions>
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="175"/>
 						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="60"/>
 					</Grid.ColumnDefinitions>
 					<!--USERNAME-->
 					<Label  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Username" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtUsername" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18"  Text="{Binding Source={x:Static properties:Settings.Default}, Path=USERNAME, Mode=TwoWay}"></TextBox>
+					<TextBox Name="txtUsername" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18"  Text="{Binding Source={x:Static properties:Settings.Default}, Path=USERNAME, Mode=TwoWay}"></TextBox>
 					<!--PASSWORD-->
 					<Label  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Password" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtPassword" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PASSWORD, Mode=TwoWay}"></TextBox>
+					<TextBox Name="txtPassword" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PASSWORD, Mode=TwoWay}"></TextBox>
 					<!--IP-->
 					<Label  Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Plex IP" FontSize="24" FontWeight="Bold"></Label>
 					<TextBox Name="txtIP" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PLEX_IP, Mode=TwoWay}"></TextBox>
+					<Button Name="btnTestIP" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Test" ToolTip="Tests the connection to the IP (10s timeout)" FontSize="18" FontWeight="Bold" Click="btnTestIP_Click"/>
 					<!--INPUT-->
 					<Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Input" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtInput" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+					<TextBox Name="txtInput" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
 					<!--OUTPUT-->
 					<Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Output" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtOutput" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+					<TextBox Name="txtOutput" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
 				</Grid>
 			</GroupBox>
 			<GroupBox Grid.Row="1" Header="LOCAL/WINDOWS SETTINGS" FontSize="16" FontWeight="Bold">
@@ -51,14 +53,23 @@
 						<RowDefinition Height="40"/>
 						<RowDefinition Height="40"/>
 						<RowDefinition Height="40"/>
+						<RowDefinition Height="40"/>
 					</Grid.RowDefinitions>
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="150"/>
+						<ColumnDefinition Width="175"/>
 						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="60"/>
 					</Grid.ColumnDefinitions>
 					<!--LOCAL HANDBRAKECLI LOCATION-->
-					<Button Name="btnHandbrakeCLI_Path" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="HB CLI Location" FontSize="18" FontWeight="Bold" Click="btnHandbrakeCLI_Path_Click"/>
+					<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="HB CLI Location" FontSize="22" FontWeight="Bold" />
 					<TextBox Name="txtHandbrakeCLI_Path" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_HANDBRAKECLI_PATH, Mode=TwoWay}"/>
+					<Button Name="btnHandbrakeCLI_Path" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Path" FontSize="18" FontWeight="Bold" Click="btnHandbrakeCLI_Path_Click"/>
+					<!--LOCAL INPUT-->
+					<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Local Input" FontSize="24" FontWeight="Bold" />
+					<TextBox Name="txtLocalInput" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_INPUT, Mode=TwoWay}"/>
+					<!--LOCAL OUTPUT-->
+					<Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Local Output" FontSize="24" FontWeight="Bold" />
+					<TextBox Name="txtLocalOutput" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=LOCAL_OUTPUT, Mode=TwoWay}"/>
 				</Grid>
 			</GroupBox>
 			<GroupBox Grid.Row="2" Header="GENERAL SETTINGS" FontSize="16" FontWeight="Bold">

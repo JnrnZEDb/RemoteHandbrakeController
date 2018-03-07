@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteHandbrakeController"
         mc:Ignorable="d"
-        Title="Remote Handbrake Controller" Height="700" Width="900">
+        Title="Remote Handbrake Controller" Height="855" Width="1100">
 	<DockPanel>
 		<Menu DockPanel.Dock="Top">
 			<MenuItem Header="_File">

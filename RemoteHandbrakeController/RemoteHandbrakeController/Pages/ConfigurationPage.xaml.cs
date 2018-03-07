@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using Renci.SshNet;
 
 
 namespace RemoteHandbrakeController
@@ -52,6 +50,38 @@ namespace RemoteHandbrakeController
 			var result = pathDialog.ShowDialog();
 
 			if (result == true) txtHandbrakeCLI_Path.Text = pathDialog.FileName;
+		}
+
+		private void btnTestIP_Click(object sender, RoutedEventArgs e)
+		{
+			SshClient testClient = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, Properties.Settings.Default.PASSWORD);
+			testClient.ConnectionInfo.Timeout = TimeSpan.FromSeconds(10);
+			try
+			{
+				testClient.Connect();
+				if (testClient.IsConnected)
+				{
+					MessageBox.Show("Connection was successful", "SUCCESS", MessageBoxButton.OK);
+					testClient.Disconnect();
+					testClient.Dispose();
+					testClient = null;
+					return;
+				}
+				else
+				{
+					MessageBox.Show(string.Format("Test Connection Failed"), "CONNECTION FAILED", MessageBoxButton.OK);
+					testClient.Dispose();
+					testClient = null;
+					return;
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(string.Format("ERROR \n Test Connection Failed: {0}", ex.Message), "ERROR (CONNECTION FAILED)", MessageBoxButton.OK);
+				testClient.Dispose();
+				testClient = null;
+			}
+			
 		}
 		#endregion
 	}
