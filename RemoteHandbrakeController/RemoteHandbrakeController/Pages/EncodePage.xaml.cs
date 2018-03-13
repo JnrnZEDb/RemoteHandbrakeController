@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -25,7 +26,7 @@ namespace RemoteHandbrakeController
 		private bool bStopEncodePressed { get; set; } = false;
 		private Process procWnds;
 		private SshCommand cmdCurrent;
-		private Thread thrdEncode;
+		private BackgroundWorker workerEncode;
 
 		private ObservableCollection<FileInfo> _lstFilesToEncode;
 		public ObservableCollection<FileInfo> lstFilesToEncode
@@ -73,22 +74,10 @@ namespace RemoteHandbrakeController
 
 				while (!asynch.IsCompleted)
 				{
+					if (workerEncode.CancellationPending) return false;
 					var result = reader.ReadToEnd();
 					if (string.IsNullOrEmpty(result)) continue;
-					Dispatcher.BeginInvoke(new Action(delegate
-					{
-						if (result != null)
-						{
-							if (Regex.Match(result, @"\d+(?:\.\d+) %").Success)
-							{
-								string strProgress = Regex.Match(result, @"\d+(?:\.\d+) %").Value;
-								double dProgress = Convert.ToDouble(strProgress.Substring(0, 4));
-								prgEncode.Value = dProgress;
-							}
-							txtOutput.AppendText(result);
-							txtOutput.ScrollToEnd();
-						}
-					}));
+					if (result != null)	workerEncode.ReportProgress(0, result);
 				}
 				cmdCurrent.EndExecute(asynch);
 				cmdCurrent = null;
@@ -130,25 +119,20 @@ namespace RemoteHandbrakeController
 				procWnds.StartInfo.RedirectStandardOutput = true;
 				procWnds.StartInfo.RedirectStandardInput = true;
 				procWnds.StartInfo.CreateNoWindow = true;
-				procWnds.OutputDataReceived += (sender, args) => Dispatcher.BeginInvoke(new Action(delegate
+				procWnds.OutputDataReceived += (sender, args) =>
 				{
-					if (args.Data != null)
-					{
-						if (Regex.Match(args.Data, @"\d+(?:\.\d+) %").Success)
-						{
-							string strProgress = Regex.Match(args.Data, @"\d+(?:\.\d+) %").Value;
-							double dProgress = Convert.ToDouble(strProgress.Substring(0, 4));
-							prgEncode.Value = dProgress;
-						}
-						txtOutput.AppendText(string.Format("{0}\n", args.Data));
-						txtOutput.ScrollToEnd();
-					}
-				}));
-
+					if (args.Data != null) workerEncode.ReportProgress(0, args.Data);
+				};
 				procWnds.Start();
 				procWnds.BeginOutputReadLine();
-				procWnds.WaitForExit();
-				procWnds = null;
+				while(!procWnds.HasExited)
+				{
+					if (workerEncode.CancellationPending)
+					{
+						procWnds.CancelOutputRead();
+						return false;
+					}
+				}
 				return true;
 			}
 			catch (Exception ex)
@@ -160,11 +144,11 @@ namespace RemoteHandbrakeController
 		}
 		#endregion
 
-		#region FUNCTIONS
+		#region WORKER_FUNCTIONS
 		/// <summary>
 		/// Goes through list of files and sends encode command
 		/// </summary>
-		private void EncodeFiles()
+		private void worker_DoEncode(object sender, DoWorkEventArgs e)
 		{
 			bCurrentlyEncoding = true;
 			for (int i = 0; i < lstFilesToEncode.Count;)
@@ -174,12 +158,12 @@ namespace RemoteHandbrakeController
 				// WINDOWS MODE
 				if (Properties.Settings.Default.LOCAL_WINDOWS_MODE)
 				{
-					//DoCommand(cmd.ToString());
+					string strCurrentFile = lstFilesToEncode[i].Name;
 					if (!DoWindowsCommand(cmd.ToString()))
 					{
 						Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING\n", lstFilesToEncode[i].Name));
+							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING\n", strCurrentFile));
 							txtOutput.ScrollToEnd();
 						}));
 						break;
@@ -188,7 +172,7 @@ namespace RemoteHandbrakeController
 					{
 						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING\n", lstFilesToEncode[i].Name));
+							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING\n", strCurrentFile));
 							if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
 							prgEncode.Value = 0;
 						}));
@@ -199,11 +183,12 @@ namespace RemoteHandbrakeController
 				// LINUX MODE
 				else
 				{
+					string strCurrentFile = lstFilesToEncode[i].Name;
 					if (!DoLinuxCommand(cmd.ToString()))
 					{
 						Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING\n", lstFilesToEncode[i].Name));
+							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING\n", strCurrentFile));
 							txtOutput.ScrollToEnd();
 						}));
 						break;
@@ -212,25 +197,58 @@ namespace RemoteHandbrakeController
 					{
 						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING\n", lstFilesToEncode[i].Name));
+							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING\n", strCurrentFile));
 							if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
 							prgEncode.Value = 0;
 						}));
-						while (disOp.Status != DispatcherOperationStatus.Completed) ;
+						while (disOp.Status != DispatcherOperationStatus.Completed);
 					}
 				}
-				if (bStopEncodePressed) Dispatcher.BeginInvoke(new Action(() => EndEncodeTask()));
+				if (workerEncode.CancellationPending) return;
 			}
-			Globals.currentFileBeingEncoded = String.Empty;
-			bCurrentlyEncoding = false;
-			Dispatcher.BeginInvoke(new Action(() =>
-			{
-				btnCancel.IsEnabled = true;
-				btnStartStopEncode.Content = "START";
-				prgEncode.Value = 0;
-			}));
 		}
 
+		/// <summary> Updates Progress </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		{
+			string strOutput = (string)e.UserState;
+			if (Regex.Match(strOutput, @"\d+(?:\.\d+) %").Success)
+			{
+				string strProgress = Regex.Match(strOutput, @"\d+(?:\.\d+) %").Value;
+				int iProgress = (int)Convert.ToDouble(strProgress.Substring(0, 4));
+				prgEncode.Value = iProgress;
+			}
+			txtOutput.AppendText(string.Format("{0}\n", strOutput));
+			txtOutput.ScrollToEnd();
+		}
+
+		/// <summary> Runs when background worker completes </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void worker_EncodeCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			if (cmdCurrent != null)
+			{
+				cmdCurrent.CancelAsync();
+				cmdCurrent = null;
+			}
+			if (procWnds != null)
+			{
+				if (!procWnds.HasExited) procWnds.Kill();
+				procWnds = null;
+			}
+			Globals.currentFileBeingEncoded = String.Empty;
+			lstFilesToEncode.Clear();
+			bCurrentlyEncoding = false;
+			btnStartStopEncode.Content = "START";
+			btnCancel.IsEnabled = true;
+			txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
+			txtOutput.ScrollToEnd();
+			prgEncode.Value = 0;
+		}
+		#endregion
 		/// <summary>
 		/// Builds proper output path for encoded file
 		/// </summary>
@@ -270,28 +288,6 @@ namespace RemoteHandbrakeController
 			return outputDir;
 		}
 
-		/// <summary> Handles encode task cancellation</summary>
-		private void EndEncodeTask()
-		{
-			if (cmdCurrent != null)
-			{
-				cmdCurrent.CancelAsync();
-				cmdCurrent = null;
-			}
-			if (procWnds != null)
-			{
-				procWnds.Kill();
-				procWnds = null;
-			}
-			lstFilesToEncode.Clear();
-			bCurrentlyEncoding = false;
-			btnStartStopEncode.Content = "START";
-			txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
-			txtOutput.ScrollToEnd();
-			prgEncode.Value = 0;
-		}
-		#endregion
-
 		#region BUTTON_CLICKS
 		private void BtnStartStopEncode_Click(object sender, RoutedEventArgs e)
 		{
@@ -301,13 +297,18 @@ namespace RemoteHandbrakeController
 				{
 					btnStartStopEncode.Content = "STOP";
 					btnCancel.IsEnabled = false;
-					thrdEncode = new Thread(() => EncodeFiles());
-					thrdEncode.Start();
+					workerEncode = new BackgroundWorker();
+					workerEncode.WorkerReportsProgress = true;
+					workerEncode.WorkerSupportsCancellation = true;
+					workerEncode.DoWork += worker_DoEncode;
+					workerEncode.ProgressChanged += worker_ProgressChanged;
+					workerEncode.RunWorkerCompleted += worker_EncodeCompleted;
+					workerEncode.RunWorkerAsync();
 				}
 				else if (bCurrentlyEncoding)
 				{
 					btnCancel.IsEnabled = true;
-					EndEncodeTask();
+					workerEncode.CancelAsync();
 				}
 			}	
 		}
@@ -317,14 +318,9 @@ namespace RemoteHandbrakeController
 			var response = MessageBox.Show("Are you sure you want to cancel?", "CANCEL", MessageBoxButton.YesNo);
 			if (response == MessageBoxResult.Yes)
 			{
-				EndEncodeTask();
+				//EndEncodeTask();
 				Globals.DisconnectFromServer(Globals.client);
 				MediaSelectionPage pageMediaSelection = new MediaSelectionPage();
-				if (procWnds != null)
-				{
-					procWnds.Kill();
-					procWnds = null;
-				}
 				NavigationService.Navigate(pageMediaSelection);
 			}
 		}
