@@ -243,7 +243,7 @@ namespace RemoteHandbrakeController
 			lstFilesToEncode.Clear();
 			bCurrentlyEncoding = false;
 			btnStartStopEncode.Content = "START";
-			btnCancel.IsEnabled = true;
+			btnBack.IsEnabled = true;
 			txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
 			txtOutput.ScrollToEnd();
 			prgEncode.Value = 0;
@@ -296,7 +296,7 @@ namespace RemoteHandbrakeController
 				if (!bCurrentlyEncoding)
 				{
 					btnStartStopEncode.Content = "STOP";
-					btnCancel.IsEnabled = false;
+					btnBack.IsEnabled = false;
 					workerEncode = new BackgroundWorker();
 					workerEncode.WorkerReportsProgress = true;
 					workerEncode.WorkerSupportsCancellation = true;
@@ -307,13 +307,13 @@ namespace RemoteHandbrakeController
 				}
 				else if (bCurrentlyEncoding)
 				{
-					btnCancel.IsEnabled = true;
+					btnBack.IsEnabled = true;
 					workerEncode.CancelAsync();
 				}
 			}	
 		}
 
-		private void btnCancel_Click(object sender, RoutedEventArgs e)
+		private void btnBack_Click(object sender, RoutedEventArgs e)
 		{
 			var response = MessageBox.Show("Are you sure you want to cancel?", "CANCEL", MessageBoxButton.YesNo);
 			if (response == MessageBoxResult.Yes)

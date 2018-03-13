@@ -39,7 +39,7 @@
 					<RowDefinition Height="40"/>
 				</Grid.RowDefinitions>
 				<TreeView Name="treeFiles" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-				<Button Name="btnEncode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Content="ENCODE SELECTED FILES" Click="BtnEncode_Click"/>
+				<Button Name="btnEncode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Content="ENCODE SELECTED FILES" FontSize="18" FontWeight="Bold" Click="BtnEncode_Click"/>
 			</Grid>
 
 		</Grid>
