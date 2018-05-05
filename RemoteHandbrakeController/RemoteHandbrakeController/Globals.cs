@@ -10,6 +10,7 @@ namespace RemoteHandbrakeController
 		public static SshClient client { get; set; }
 		public static string currentFileBeingEncoded { get; set; } = String.Empty;
 
+		public static readonly string LINUX_PLEX_PRESET = "/var/lib/handbrakecli/PlexHandbrake.json";
 		// <summary>
 		/// Connects to server
 		/// </summary>
