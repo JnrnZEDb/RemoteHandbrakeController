@@ -10,6 +10,9 @@ The design of this program was based around for personal use so it won't really 
 
 Future versions will ideally allow for more customization and configuration.
 
+### Instructions for building HandBrakeCLI for Linux
+https://handbrake.fr/docs/en/latest/developer/build-linux.html
+
 ## Versions
 ### Current Version: BETA
 Still being worked on for basic functionality.  Mostly complete but one of the core features still needs to be worked on but current setup makes it hard to properly test/develop it.
