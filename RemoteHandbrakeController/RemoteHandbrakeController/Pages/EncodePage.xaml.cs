@@ -64,7 +64,7 @@ namespace RemoteHandbrakeController
 
 			Dispatcher.BeginInvoke(new Action(delegate
 			{
-				txtOutput.AppendText(String.Format("{0}\n", command));
+				txtOutput.AppendText($"{command}\n");
 			}));
 			try
 			{
@@ -85,7 +85,7 @@ namespace RemoteHandbrakeController
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(String.Format("{0}", ex.Message), "ERROR", MessageBoxButton.OK);
+				MessageBox.Show($"{ex.Message}", "ERROR", MessageBoxButton.OK);
 				return false;
 			}
 		}
@@ -99,7 +99,7 @@ namespace RemoteHandbrakeController
 			string arguments = command.Remove(0, 12);
 			Dispatcher.BeginInvoke(new Action(delegate
 			{
-				txtOutput.AppendText(String.Format("{0}\n", command));
+				txtOutput.AppendText($"{command}\n");
 			}));
 			try
 			{
@@ -233,7 +233,7 @@ namespace RemoteHandbrakeController
 				int iProgress = (int)Convert.ToDouble(strProgress.Substring(0, 4));
 				prgEncode.Value = iProgress;
 			}
-			txtOutput.AppendText(string.Format("{0}\n", strOutput));
+			txtOutput.AppendText($"{strOutput}\n");
 			txtOutput.ScrollToEnd();
 		}
 

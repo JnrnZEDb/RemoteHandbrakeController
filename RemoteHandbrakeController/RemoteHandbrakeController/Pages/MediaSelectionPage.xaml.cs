@@ -27,17 +27,17 @@ namespace RemoteHandbrakeController
 		#region BUTTON_CLICKS
 		private void BtnMovies_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles, String.Format("{0}Movies", Properties.Settings.Default.INPUT_DIRECTORY));
+			ListDirectory(treeFiles, $"{Properties.Settings.Default.INPUT_DIRECTORY}Movies");
 		}
 
 		private void BtnTV_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles, String.Format("{0}TV Shows", Properties.Settings.Default.INPUT_DIRECTORY));
+			ListDirectory(treeFiles,$"{Properties.Settings.Default.INPUT_DIRECTORY}TV Shows");
 		}
 
 		private void BtnAnime_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles, String.Format("{0}Anime", Properties.Settings.Default.INPUT_DIRECTORY));
+			ListDirectory(treeFiles, $"{Properties.Settings.Default.INPUT_DIRECTORY}Anime");
 		}
 
 		private void BtnEncode_Click(object sender, RoutedEventArgs e)
@@ -46,14 +46,12 @@ namespace RemoteHandbrakeController
 			{
 				lstFilesToBeEncoded.Clear();
 				FindChecked((TreeViewItem)treeFiles.Items.GetItemAt(0));
-				//EncodeWindow wndEncode = new EncodeWindow(lstFilesToBeEncoded);
-				//wndEncode.Show();
 				EncodePage pageEncode = new EncodePage(lstFilesToBeEncoded);
 				NavigationService.Navigate(pageEncode);
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(string.Format("Error: {0}", ex.Message), "ERROR", MessageBoxButton.OK);
+				MessageBox.Show($"Error: {ex.Message}", "ERROR", MessageBoxButton.OK);
 			}
 			
 		}

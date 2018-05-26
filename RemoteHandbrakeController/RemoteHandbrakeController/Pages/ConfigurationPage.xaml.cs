@@ -49,7 +49,24 @@ namespace RemoteHandbrakeController
 			pathDialog.InitialDirectory = @"C:\";
 			var result = pathDialog.ShowDialog();
 
-			if (result == true) txtHandbrakeCLI_Path.Text = pathDialog.FileName;
+			if (result == true)
+			{
+				txtHandbrakeCLI_Path.Text = pathDialog.FileName;
+				Properties.Settings.Default.LOCAL_HANDBRAKECLI_PATH = txtHandbrakeCLI_Path.Text;
+			}
+		}
+
+		private void btnInputDirPath_Click(object sender, RoutedEventArgs e)
+		{
+			using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+			{
+				System.Windows.Forms.DialogResult dlgResult = dialog.ShowDialog();
+				if (dlgResult == System.Windows.Forms.DialogResult.OK)
+				{
+					txtInput.Text = dialog.SelectedPath;
+					Properties.Settings.Default.INPUT_DIRECTORY = txtInput.Text;
+				}
+			}
 		}
 
 		private void btnTestIP_Click(object sender, RoutedEventArgs e)
@@ -80,7 +97,7 @@ namespace RemoteHandbrakeController
 					}
 					else
 					{
-						MessageBox.Show(string.Format("Test Connection Failed"), "CONNECTION FAILED", MessageBoxButton.OK);
+						MessageBox.Show("Test Connection Failed", "CONNECTION FAILED", MessageBoxButton.OK);
 						return;
 					}
 
@@ -88,7 +105,7 @@ namespace RemoteHandbrakeController
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(string.Format("ERROR \n Test Connection Failed: {0}", ex.Message), "ERROR (CONNECTION FAILED)", MessageBoxButton.OK);
+				MessageBox.Show($"ERROR \n Test Connection Failed: {ex.Message}", "ERROR (CONNECTION FAILED)", MessageBoxButton.OK);
 			}
 			
 		}

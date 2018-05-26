@@ -12,7 +12,7 @@ namespace RemoteHandbrakeController.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -49,7 +49,7 @@ namespace RemoteHandbrakeController.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("H:\\\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("H:\\")]
         public string INPUT_DIRECTORY {
             get {
                 return ((string)(this["INPUT_DIRECTORY"]));
@@ -80,18 +80,6 @@ namespace RemoteHandbrakeController.Properties {
             }
             set {
                 this["LOCAL_WINDOWS_MODE"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("H:\\\\")]
-        public string LOCAL_INPUT {
-            get {
-                return ((string)(this["LOCAL_INPUT"]));
-            }
-            set {
-                this["LOCAL_INPUT"] = value;
             }
         }
         

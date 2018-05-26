@@ -60,7 +60,7 @@ namespace RemoteHandbrakeController
 		/// <param name="e"></param>
 		private void OnTimedEvent(object source, ElapsedEventArgs e)
 		{
-			if (Globals.currentFileBeingEncoded != String.Empty) Dispatcher.Invoke(() => txtCurrentFile.Text = string.Format("CURRENTLY ENCODING {0}", Globals.currentFileBeingEncoded));
+			if (Globals.currentFileBeingEncoded != String.Empty) Dispatcher.Invoke(() => txtCurrentFile.Text = $"CURRENTLY ENCODING { Globals.currentFileBeingEncoded}");
 			else Dispatcher.Invoke(() => txtCurrentFile.Text = String.Empty);
 
 			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE) Dispatcher.Invoke(() => txtMode.Text = "LOCAL WINDOWS MODE");
