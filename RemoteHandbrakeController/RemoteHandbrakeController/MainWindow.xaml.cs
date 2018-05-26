@@ -19,31 +19,9 @@ namespace RemoteHandbrakeController
 	{
 		List<FileInfo> lstFilesToBeEncoded = new List<FileInfo>();
 
-		/// <summary>
-		/// Shows connection status
-		/// </summary>
-		public bool IsConnected
-		{
-			get { return IsConnected; }
-			set
-			{
-				switch (value)
-				{
-					case true:
-						Dispatcher.Invoke(() => txtConnectionStatus.Text = String.Format("CONNECTED TO {0}", Properties.Settings.Default.PLEX_IP));
-						break;
-					case false:
-						Dispatcher.Invoke(() => txtConnectionStatus.Text = String.Format("NOT CONNECTED TO {0}", Properties.Settings.Default.PLEX_IP));
-						break;
-				}
-			}
-		}
-
 		/// <summary> Constructor</summary>
 		public MainWindow()
 		{
-			Globals.client = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, Properties.Settings.Default.PASSWORD);
-
 			System.Timers.Timer timerStatus = new System.Timers.Timer();
 			timerStatus.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 			timerStatus.Interval = 1500;
@@ -73,16 +51,6 @@ namespace RemoteHandbrakeController
 			Application.Current.Shutdown();
 			return;
 		}
-
-		private void mnuConnect_Click(object sender, RoutedEventArgs e)
-		{
-			Globals.ConnectToServer(Globals.client);
-		}
-
-		private void mnuDisconnect_Click(object sender, RoutedEventArgs e)
-		{
-			Globals.DisconnectFromServer(Globals.client);
-		}
 		#endregion
 
 		/// <summary>
@@ -92,7 +60,6 @@ namespace RemoteHandbrakeController
 		/// <param name="e"></param>
 		private void OnTimedEvent(object source, ElapsedEventArgs e)
 		{
-			IsConnected = Globals.client.IsConnected;
 			if (Globals.currentFileBeingEncoded != String.Empty) Dispatcher.Invoke(() => txtCurrentFile.Text = string.Format("CURRENTLY ENCODING {0}", Globals.currentFileBeingEncoded));
 			else Dispatcher.Invoke(() => txtCurrentFile.Text = String.Empty);
 
@@ -102,7 +69,6 @@ namespace RemoteHandbrakeController
 			if (Properties.Settings.Default.TEST_MODE) Dispatcher.Invoke(() => txtTestMode.Text = "TEST MODE");
 			else Dispatcher.Invoke(() => txtTestMode.Text = "ENCODE MODE");
 		}
-			
-			
+					
 	}
 }

@@ -24,6 +24,7 @@ namespace RemoteHandbrakeController
 	{
 		private bool bCurrentlyEncoding { get; set; } = false;
 		private bool bStopEncodePressed { get; set; } = false;
+		private string strPassword { get; set; } = string.Empty;
 		private Process procWnds;
 		private SshCommand cmdCurrent;
 		private BackgroundWorker workerEncode;
@@ -50,7 +51,6 @@ namespace RemoteHandbrakeController
 			lstFilesToEncode = new ObservableCollection<FileInfo>(lstFiles);
 			InitializeComponent();
 			this.DataContext = this;
-			Globals.ConnectToServer(Globals.client);
 		}
 
 		#region DO_COMMANDS
@@ -58,9 +58,9 @@ namespace RemoteHandbrakeController
 		/// Runs command and prints output to window if talking to Debian Linux
 		/// </summary>
 		/// <param name="command"></param>
-		private bool DoLinuxCommand(string command)
+		private bool DoLinuxCommand(string command, SshClient linuxClient)
 		{
-			if (Properties.Settings.Default.TEST_MODE) command = "ping 192.168.1.12 -c 5";
+			if (Properties.Settings.Default.TEST_MODE) command = $"ping {Properties.Settings.Default.PLEX_IP} -c 5";
 
 			Dispatcher.BeginInvoke(new Action(delegate
 			{
@@ -68,7 +68,7 @@ namespace RemoteHandbrakeController
 			}));
 			try
 			{
-				cmdCurrent = Globals.client.CreateCommand(command);
+				cmdCurrent = linuxClient.CreateCommand(command);
 				var asynch = cmdCurrent.BeginExecute();
 				var reader = new StreamReader(cmdCurrent.OutputStream);
 
@@ -77,7 +77,7 @@ namespace RemoteHandbrakeController
 					if (workerEncode.CancellationPending) return false;
 					var result = reader.ReadToEnd();
 					if (string.IsNullOrEmpty(result)) continue;
-					if (result != null)	workerEncode.ReportProgress(0, result);
+					if (result != null) workerEncode.ReportProgress(0, result);
 				}
 				cmdCurrent.EndExecute(asynch);
 				cmdCurrent = null;
@@ -107,7 +107,7 @@ namespace RemoteHandbrakeController
 				if (Properties.Settings.Default.TEST_MODE)
 				{
 					procWnds.StartInfo.FileName = "cmd.exe";
-					procWnds.StartInfo.Arguments = "/C ping 192.168.1.12";
+					procWnds.StartInfo.Arguments = "/C ping 127.0.0.1";
 				}
 				else
 				{
@@ -137,7 +137,7 @@ namespace RemoteHandbrakeController
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(string.Format("ERROR: {0}", ex.Message), "ERROR", MessageBoxButton.OK);
+				MessageBox.Show($"ERROR: {ex}", "ERROR", MessageBoxButton.OK);
 				return false;
 			}
 
@@ -163,7 +163,7 @@ namespace RemoteHandbrakeController
 					{
 						Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING\n", strCurrentFile));
+							txtOutput.AppendText($"FAILED TO ENCODE {strCurrentFile} | ABORTING\n");
 							txtOutput.ScrollToEnd();
 						}));
 						break;
@@ -172,7 +172,7 @@ namespace RemoteHandbrakeController
 					{
 						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
 						{
-							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING\n", strCurrentFile));
+							txtOutput.AppendText($"{strCurrentFile} FINISHED ENCODING\n");
 							if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
 							prgEncode.Value = 0;
 						}));
@@ -183,26 +183,39 @@ namespace RemoteHandbrakeController
 				// LINUX MODE
 				else
 				{
-					string strCurrentFile = lstFilesToEncode[i].Name;
-					if (!DoLinuxCommand(cmd.ToString()))
+					try
 					{
-						Dispatcher.BeginInvoke(new Action(delegate
+						using (var client = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, strPassword))
 						{
-							txtOutput.AppendText(String.Format("FAILED TO ENCODE {0} | ABORTING\n", strCurrentFile));
-							txtOutput.ScrollToEnd();
-						}));
-						break;
+							client.Connect();
+							string strCurrentFile = lstFilesToEncode[i].Name;
+							if (!DoLinuxCommand(cmd.ToString(), client))
+							{
+								Dispatcher.BeginInvoke(new Action(delegate
+								{
+									txtOutput.AppendText($"FAILED TO ENCODE {strCurrentFile} | ABORTING\n");
+									txtOutput.ScrollToEnd();
+								}));
+								break;
+							}
+							else
+							{
+								DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
+								{
+									txtOutput.AppendText($"{strCurrentFile} FINISHED ENCODING\n");
+									if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
+									prgEncode.Value = 0;
+								}));
+								while (disOp.Status != DispatcherOperationStatus.Completed) ;
+							}
+							client.Disconnect();
+						}
 					}
-					else
+					catch (Exception ex)
 					{
-						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
-						{
-							txtOutput.AppendText(String.Format("{0} FINISHED ENCODING\n", strCurrentFile));
-							if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
-							prgEncode.Value = 0;
-						}));
-						while (disOp.Status != DispatcherOperationStatus.Completed);
+						MessageBox.Show($"ERROR: {ex}", "ERROR", MessageBoxButton.OK);
 					}
+
 				}
 				if (workerEncode.CancellationPending) return;
 			}
@@ -244,7 +257,7 @@ namespace RemoteHandbrakeController
 			bCurrentlyEncoding = false;
 			btnStartStopEncode.Content = "START";
 			btnBack.IsEnabled = true;
-			txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
+			if (workerEncode.CancellationPending) txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
 			txtOutput.ScrollToEnd();
 			prgEncode.Value = 0;
 		}
@@ -295,6 +308,22 @@ namespace RemoteHandbrakeController
 			{
 				if (!bCurrentlyEncoding)
 				{
+					if (!Properties.Settings.Default.LOCAL_WINDOWS_MODE)
+					{
+						strPassword = string.Empty;
+						PasswordPrompt passPrompt = new PasswordPrompt();
+						if (passPrompt.ShowDialog().Value)
+						{
+							strPassword = passPrompt.strPassword;
+						}
+						else
+						{
+							passPrompt = null;
+							return;
+						}
+						passPrompt = null;
+					}
+					
 					btnStartStopEncode.Content = "STOP";
 					btnBack.IsEnabled = false;
 					workerEncode = new BackgroundWorker();
@@ -315,11 +344,17 @@ namespace RemoteHandbrakeController
 
 		private void btnBack_Click(object sender, RoutedEventArgs e)
 		{
-			var response = MessageBox.Show("Are you sure you want to cancel?", "CANCEL", MessageBoxButton.YesNo);
-			if (response == MessageBoxResult.Yes)
+			if (lstFilesToEncode.Count > 0)
 			{
-				//EndEncodeTask();
-				Globals.DisconnectFromServer(Globals.client);
+				var response = MessageBox.Show("Are you sure you want to cancel?", "CANCEL", MessageBoxButton.YesNo);
+				if (response == MessageBoxResult.Yes)
+				{
+					MediaSelectionPage pageMediaSelection = new MediaSelectionPage();
+					NavigationService.Navigate(pageMediaSelection);
+				}
+			}
+			else
+			{
 				MediaSelectionPage pageMediaSelection = new MediaSelectionPage();
 				NavigationService.Navigate(pageMediaSelection);
 			}

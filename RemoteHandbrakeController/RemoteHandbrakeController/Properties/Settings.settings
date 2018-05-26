@@ -5,11 +5,8 @@
     <Setting Name="USERNAME" Type="System.String" Scope="User">
       <Value Profile="(Default)">dshinevar</Value>
     </Setting>
-    <Setting Name="PASSWORD" Type="System.String" Scope="User">
-      <Value Profile="(Default)">aquadan12</Value>
-    </Setting>
     <Setting Name="PLEX_IP" Type="System.String" Scope="User">
-      <Value Profile="(Default)">192.168.1.12</Value>
+      <Value Profile="(Default)">10.0.0.2</Value>
     </Setting>
     <Setting Name="INPUT_DIRECTORY" Type="System.String" Scope="User">
       <Value Profile="(Default)">H:\\</Value>

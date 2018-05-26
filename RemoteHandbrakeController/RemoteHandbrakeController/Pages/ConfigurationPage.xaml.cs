@@ -54,32 +54,41 @@ namespace RemoteHandbrakeController
 
 		private void btnTestIP_Click(object sender, RoutedEventArgs e)
 		{
-			SshClient testClient = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, Properties.Settings.Default.PASSWORD);
-			testClient.ConnectionInfo.Timeout = TimeSpan.FromSeconds(10);
+			string password = string.Empty;
+			PasswordPrompt passPrompt = new PasswordPrompt();
+			if (passPrompt.ShowDialog().Value)
+			{
+				password = passPrompt.strPassword;
+			}
+			else
+			{
+				passPrompt = null;
+				return;
+			}
+			passPrompt = null;
 			try
 			{
-				testClient.Connect();
-				if (testClient.IsConnected)
+				using (var testClient = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, password))
 				{
-					MessageBox.Show("Connection was successful", "SUCCESS", MessageBoxButton.OK);
-					testClient.Disconnect();
-					testClient.Dispose();
-					testClient = null;
-					return;
-				}
-				else
-				{
-					MessageBox.Show(string.Format("Test Connection Failed"), "CONNECTION FAILED", MessageBoxButton.OK);
-					testClient.Dispose();
-					testClient = null;
-					return;
+					testClient.ConnectionInfo.Timeout = TimeSpan.FromSeconds(10);
+					testClient.Connect();
+					if (testClient.IsConnected)
+					{
+						MessageBox.Show("Connection was successful", "SUCCESS", MessageBoxButton.OK);
+						testClient.Disconnect();
+						return;
+					}
+					else
+					{
+						MessageBox.Show(string.Format("Test Connection Failed"), "CONNECTION FAILED", MessageBoxButton.OK);
+						return;
+					}
+
 				}
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(string.Format("ERROR \n Test Connection Failed: {0}", ex.Message), "ERROR (CONNECTION FAILED)", MessageBoxButton.OK);
-				testClient.Dispose();
-				testClient = null;
 			}
 			
 		}

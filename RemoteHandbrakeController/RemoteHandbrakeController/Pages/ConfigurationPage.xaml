@@ -32,19 +32,16 @@
 					<!--USERNAME-->
 					<Label  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Username" FontSize="24" FontWeight="Bold"></Label>
 					<TextBox Name="txtUsername" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18"  Text="{Binding Source={x:Static properties:Settings.Default}, Path=USERNAME, Mode=TwoWay}"></TextBox>
-					<!--PASSWORD-->
-					<Label  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Password" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtPassword" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PASSWORD, Mode=TwoWay}"></TextBox>
 					<!--IP-->
-					<Label  Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Plex IP" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtIP" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PLEX_IP, Mode=TwoWay}"></TextBox>
-					<Button Name="btnTestIP" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Test" ToolTip="Tests the connection to the IP (10s timeout)" FontSize="18" FontWeight="Bold" Click="btnTestIP_Click"/>
+					<Label  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Plex IP" FontSize="24" FontWeight="Bold"></Label>
+					<TextBox Name="txtIP" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PLEX_IP, Mode=TwoWay}"></TextBox>
+					<Button Name="btnTestIP" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Test" ToolTip="Tests the connection to the IP (10s timeout)" FontSize="18" FontWeight="Bold" Click="btnTestIP_Click"/>
 					<!--INPUT-->
-					<Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Input" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtInput" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+					<Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Input" FontSize="24" FontWeight="Bold"></Label>
+					<TextBox Name="txtInput" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
 					<!--OUTPUT-->
-					<Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Output" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtOutput" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+					<Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Output" FontSize="24" FontWeight="Bold"></Label>
+					<TextBox Name="txtOutput" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
 				</Grid>
 			</GroupBox>
 			<GroupBox Grid.Row="1" Header="LOCAL/WINDOWS SETTINGS" FontSize="16" FontWeight="Bold">
