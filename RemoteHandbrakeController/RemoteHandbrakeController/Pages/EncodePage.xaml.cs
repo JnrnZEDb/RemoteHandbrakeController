@@ -158,6 +158,7 @@ namespace RemoteHandbrakeController
 				// WINDOWS MODE
 				if (Properties.Settings.Default.LOCAL_WINDOWS_MODE)
 				{
+					cmd.HandBrakePreset = Globals.WINDOWS_PLEX_PRESET;
 					string strCurrentFile = lstFilesToEncode[i].Name;
 					if (!DoWindowsCommand(cmd.ToString()))
 					{
@@ -275,21 +276,21 @@ namespace RemoteHandbrakeController
 			{
 				if (inputFile.FullName.Contains("Movies"))
 				{
-					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\Movies (Encoded)\\" + inputFile.Name.Replace("mkv", "m4v");
+					outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\Movies (Encoded)\{inputFile.Name.Replace("mkv", "m4v")}";
 				}
 				else if (inputFile.FullName.Contains("TV Shows"))
 				{
 					string[] folders = inputFile.FullName.Split('\\');
-					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\TV Shows (Encoded)\\" + folders[folders.Length - 3] + "\\" + folders[folders.Length - 2];
+					outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\TV Shows (Encoded)\{folders[folders.Length - 3]}\{folders[folders.Length - 2]}";
 					Directory.CreateDirectory(outputDir);
-					outputDir += "\\" + inputFile.Name.Replace("mkv", "m4v");
+					outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}";
 				}
 				else if (inputFile.FullName.Contains("Anime"))
 				{
 					string[] folders = inputFile.FullName.Split('\\');
-					outputDir = Properties.Settings.Default.LOCAL_OUTPUT + "\\Anime (Encoded)\\" + folders[folders.Length - 3] + "\\" + folders[folders.Length - 2];
+					outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\Anime (Encoded)\{folders[folders.Length - 3]}\{folders[folders.Length - 2]}";
 					Directory.CreateDirectory(outputDir);
-					outputDir += "\\" + inputFile.Name.Replace("mkv", "m4v");
+					outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}";
 				}
 
 			}
