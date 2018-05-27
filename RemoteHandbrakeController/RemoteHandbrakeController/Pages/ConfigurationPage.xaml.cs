@@ -15,6 +15,8 @@ namespace RemoteHandbrakeController
 	{
 		private Page pagePrevious { get; set; }
 
+		/// <summary> Constructor </summary>
+		/// <param name="p"></param>
 		public ConfigurationPage(Page p)
 		{
 			pagePrevious = p;
@@ -22,6 +24,9 @@ namespace RemoteHandbrakeController
 		}
 
 		#region BUTTON_CLICKS
+		/// <summary> Apply Button - saves settings </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnApplyConfig_Click(object sender, RoutedEventArgs e)
 		{
 			try
@@ -37,11 +42,17 @@ namespace RemoteHandbrakeController
 			MessageBox.Show("Config Settings Saved Succesfully", "CONFIG SAVED", MessageBoxButton.OK);
 		}
 
+		/// <summary> Back Button - Goes back to last page </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnBack_Click(object sender, RoutedEventArgs e)
 		{
 			NavigationService.Navigate(pagePrevious);
 		}
 
+		/// <summary> Sets path for HandbrakeCLI.exe locally </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnHandbrakeCLI_Path_Click(object sender, RoutedEventArgs e)
 		{
 			OpenFileDialog pathDialog = new OpenFileDialog();
@@ -56,6 +67,9 @@ namespace RemoteHandbrakeController
 			}
 		}
 
+		/// <summary> Sets path for video input files </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnInputDirPath_Click(object sender, RoutedEventArgs e)
 		{
 			using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
@@ -69,6 +83,25 @@ namespace RemoteHandbrakeController
 			}
 		}
 
+		/// <summary> Sets path for local video output </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnLocalOutput_Path_Click(object sender, RoutedEventArgs e)
+		{
+			using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+			{
+				System.Windows.Forms.DialogResult dlgResult = dialog.ShowDialog();
+				if (dlgResult == System.Windows.Forms.DialogResult.OK)
+				{
+					txtLocalOutput.Text = dialog.SelectedPath;
+					Properties.Settings.Default.LOCAL_OUTPUT = txtLocalOutput.Text;
+				}
+			}
+		}
+
+		/// <summary> Tests IP address (ping with 10s timeout) </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnTestIP_Click(object sender, RoutedEventArgs e)
 		{
 			string password = string.Empty;
