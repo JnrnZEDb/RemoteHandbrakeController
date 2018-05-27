@@ -9,7 +9,7 @@
       Title="MediaSelection"
 	  ShowsNavigationUI="False">
 	<DockPanel>
-		<Grid Background="DimGray">
+		<Grid Background="DodgerBlue">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="200"/>
 				<ColumnDefinition Width="*"/>
@@ -24,6 +24,9 @@
 					<RowDefinition Height="*"/>
 				</Grid.RowDefinitions>
 
+				<Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="5"/>
+				<Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" BorderBrush="Black" BorderThickness="5"/>
+								
 				<Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Content="Select Library" FontSize="20" FontWeight="Bold"/>
 				<Button Name="btnMovies" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Movies" FontSize="15" Width="100" Height="50" Click="BtnMovies_Clicked"/>
 				<Button Name="btnTV" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="TV Shows" FontSize="15" Width="100" Height="50" Click="BtnTV_Clicked"/>
@@ -35,8 +38,10 @@
 					<RowDefinition Height="*"/>
 					<RowDefinition Height="40"/>
 				</Grid.RowDefinitions>
-				<TreeView Name="treeFiles" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-				<Button Name="btnEncode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Content="ENCODE SELECTED FILES" FontSize="18" FontWeight="Bold" Click="BtnEncode_Click"/>
+				<Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="5"/>
+				
+				<TreeView Name="treeFiles" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,0"/>
+				<Button Name="btnEncode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="300" Margin="0,5,0,7" Content="ENCODE SELECTED FILES" FontSize="18" FontWeight="Bold" Click="BtnEncode_Click"/>
 			</Grid>
 
 		</Grid>
