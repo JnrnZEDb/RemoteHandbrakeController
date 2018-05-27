@@ -9,7 +9,7 @@
       Title="MediaSelection"
 	  ShowsNavigationUI="False">
 	<DockPanel>
-		<Grid Background="DodgerBlue">
+		<Grid Background="LightSlateGray">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="200"/>
 				<ColumnDefinition Width="*"/>
