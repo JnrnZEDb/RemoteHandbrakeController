@@ -9,7 +9,7 @@ Since HandBrake likes using a lot of threads, this allows you to encode your vid
 The design of this program was based around for personal use so it won't really fit other people's uses.
 
 Future versions will ideally allow for more customization and configuration.
-#### Potentially Useful Links
+## Potentially Useful Links
 ### Instructions for building HandBrakeCLI for Linux
 https://handbrake.fr/docs/en/latest/developer/build-linux.html
 ### Mount Windows Shares in Linux
