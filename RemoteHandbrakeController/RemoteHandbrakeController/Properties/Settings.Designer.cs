@@ -50,18 +50,18 @@ namespace RemoteHandbrakeController.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("H:\\")]
-        public string INPUT_DIRECTORY {
+        public string INPUT_SCAN_DIRECTORY {
             get {
-                return ((string)(this["INPUT_DIRECTORY"]));
+                return ((string)(this["INPUT_SCAN_DIRECTORY"]));
             }
             set {
-                this["INPUT_DIRECTORY"] = value;
+                this["INPUT_SCAN_DIRECTORY"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("/home/Media")]
         public string OUTPUT_DIRECTORY {
             get {
                 return ((string)(this["OUTPUT_DIRECTORY"]));
@@ -116,6 +116,18 @@ namespace RemoteHandbrakeController.Properties {
             }
             set {
                 this["TEST_MODE"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/media/windowsmedia")]
+        public string LINUX_INPUT_DIRECTORY {
+            get {
+                return ((string)(this["LINUX_INPUT_DIRECTORY"]));
+            }
+            set {
+                this["LINUX_INPUT_DIRECTORY"] = value;
             }
         }
     }

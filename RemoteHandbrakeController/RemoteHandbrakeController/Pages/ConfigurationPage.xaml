@@ -36,9 +36,14 @@
 					<Label  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Plex IP" FontSize="24" FontWeight="Bold"></Label>
 					<TextBox Name="txtIP" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=PLEX_IP, Mode=TwoWay}"></TextBox>
 					<Button Name="btnTestIP" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Content="Test" ToolTip="Tests the connection to the IP (10s timeout)" FontSize="18" FontWeight="Bold" Click="btnTestIP_Click"/>
+					<!--INPUT-->
+					<Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Input (Linux)" FontSize="24" FontWeight="Bold"/>
+					<TextBox Name="txtLinuxInput" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" 
+							 Text="{Binding Source={x:Static properties:Settings.Default}, Path=LINUX_INPUT_DIRECTORY, Mode=TwoWay}" ToolTip="Media file input directory from Linux Server point of view."/>
 					<!--OUTPUT-->
-					<Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Output" FontSize="24" FontWeight="Bold"></Label>
-					<TextBox Name="txtOutput" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+					<Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Output" FontSize="24" FontWeight="Bold"/>
+					<TextBox Name="txtOutput" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" 
+							 Text="{Binding Source={x:Static properties:Settings.Default}, Path=OUTPUT_DIRECTORY, Mode=TwoWay}" ToolTip="Media file output directory."/>
 				</Grid>
 			</GroupBox>
 			<GroupBox Grid.Row="1" Header="LOCAL/WINDOWS SETTINGS" FontSize="16" FontWeight="Bold">
@@ -77,8 +82,8 @@
 						<ColumnDefinition Width="60"/>
 					</Grid.ColumnDefinitions>
 					<!--INPUT-->
-					<Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Input" FontSize="24" FontWeight="Bold" ToolTip="Folder that contains Movies, Tv Shows, and Anime folders."/>
-					<TextBox Name="txtInput" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_DIRECTORY, Mode=TwoWay}"></TextBox>
+					<Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Scan Input" FontSize="24" FontWeight="Bold" ToolTip="Folder that is scanned for media files."/>
+					<TextBox Name="txtScanInput" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" Text="{Binding Source={x:Static properties:Settings.Default}, Path=INPUT_SCAN_DIRECTORY, Mode=TwoWay}"></TextBox>
 					<Button Name="btnInputDir_Path" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Content="Path" FontSize="18" FontWeight="Bold" Click="btnInputDirPath_Click"/>
 					<!--LOCAL_WINDOWS_MODE-->
 					<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Local Mode" FontSize="19" FontWeight="Bold"/>

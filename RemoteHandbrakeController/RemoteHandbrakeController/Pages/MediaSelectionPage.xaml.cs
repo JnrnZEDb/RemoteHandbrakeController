@@ -27,17 +27,17 @@ namespace RemoteHandbrakeController
 		#region BUTTON_CLICKS
 		private void BtnMovies_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles, $"{Properties.Settings.Default.INPUT_DIRECTORY}Movies");
+			ListDirectory(treeFiles, $"{Properties.Settings.Default.INPUT_SCAN_DIRECTORY}Movies");
 		}
 
 		private void BtnTV_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles,$"{Properties.Settings.Default.INPUT_DIRECTORY}TV Shows");
+			ListDirectory(treeFiles,$"{Properties.Settings.Default.INPUT_SCAN_DIRECTORY}TV Shows");
 		}
 
 		private void BtnAnime_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles, $"{Properties.Settings.Default.INPUT_DIRECTORY}Anime");
+			ListDirectory(treeFiles, $"{Properties.Settings.Default.INPUT_SCAN_DIRECTORY}Anime");
 		}
 
 		private void BtnEncode_Click(object sender, RoutedEventArgs e)

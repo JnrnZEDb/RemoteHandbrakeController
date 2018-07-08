@@ -76,8 +76,8 @@ namespace RemoteHandbrakeController
 				System.Windows.Forms.DialogResult dlgResult = dialog.ShowDialog();
 				if (dlgResult == System.Windows.Forms.DialogResult.OK)
 				{
-					txtInput.Text = dialog.SelectedPath;
-					Properties.Settings.Default.INPUT_DIRECTORY = txtInput.Text;
+					txtScanInput.Text = dialog.SelectedPath;
+					Properties.Settings.Default.INPUT_SCAN_DIRECTORY = txtScanInput.Text;
 				}
 			}
 		}

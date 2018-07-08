@@ -150,7 +150,7 @@ namespace RemoteHandbrakeController
 			for (int i = 0; i < lstFilesToEncode.Count;)
 			{
 				Globals.currentFileBeingEncoded = lstFilesToEncode[i].Name;
-				HandbrakeCommand cmd = new HandbrakeCommand(lstFilesToEncode[i].FullName, BuildOutputString(lstFilesToEncode[i]));
+				HandbrakeCommand cmd = new HandbrakeCommand(Globals.BuildInputString(lstFilesToEncode[i]), Globals.BuildOutputString(lstFilesToEncode[i]));
 				// WINDOWS MODE
 				if (Properties.Settings.Default.LOCAL_WINDOWS_MODE)
 				{
@@ -230,7 +230,8 @@ namespace RemoteHandbrakeController
 				int iProgress = (int)Convert.ToDouble(strProgress.Substring(0, 4));
 				prgEncode.Value = iProgress;
 			}
-			txtOutput.AppendText($"{strOutput}\n");
+			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE) txtOutput.AppendText($"{strOutput}\n");
+			else txtOutput.AppendText(strOutput);
 			txtOutput.ScrollToEnd();
 		}
 
@@ -259,44 +260,7 @@ namespace RemoteHandbrakeController
 			prgEncode.Value = 0;
 		}
 		#endregion
-		/// <summary>
-		/// Builds proper output path for encoded file
-		/// </summary>
-		/// <param name="inputFile"></param>
-		/// <returns></returns>
-		private string BuildOutputString(FileInfo inputFile)
-		{
-			string outputDir = "";
-			// Local Windows Build
-			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE)
-			{
-				if (inputFile.FullName.Contains("Movies"))
-				{
-					outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\Movies (Encoded)\{inputFile.Name.Replace("mkv", "m4v")}";
-				}
-				else if (inputFile.FullName.Contains("TV Shows"))
-				{
-					string[] folders = inputFile.FullName.Split('\\');
-					outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\TV Shows (Encoded)\{folders[folders.Length - 3]}\{folders[folders.Length - 2]}";
-					Directory.CreateDirectory(outputDir);
-					outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}";
-				}
-				else if (inputFile.FullName.Contains("Anime"))
-				{
-					string[] folders = inputFile.FullName.Split('\\');
-					outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\Anime (Encoded)\{folders[folders.Length - 3]}\{folders[folders.Length - 2]}";
-					Directory.CreateDirectory(outputDir);
-					outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}";
-				}
-
-			}
-			// Linux Build
-			else
-			{
-
-			}
-			return outputDir;
-		}
+		
 
 		#region BUTTON_CLICKS
 		private void BtnStartStopEncode_Click(object sender, RoutedEventArgs e)
