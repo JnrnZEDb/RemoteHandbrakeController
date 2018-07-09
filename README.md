@@ -16,5 +16,8 @@ https://handbrake.fr/docs/en/latest/developer/build-linux.html
 https://wiki.ubuntu.com/MountWindowsSharesPermanently
 
 ## Versions
-### Current Version: BETA
-Still being worked on for basic functionality.  Mostly complete but one of the core features still needs to be worked on but current setup makes it hard to properly test/develop it.
+### Current Version: 1.0.0
+Basic functionality is there.
+
+## Current Tasks
+Convert config into separate XML config.  Will use for additional functionality.
