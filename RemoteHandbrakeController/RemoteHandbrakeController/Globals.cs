@@ -1,15 +1,70 @@
 ﻿using System;
 using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace RemoteHandbrakeController
 {
 	public static class Globals
 	{
-		public static string currentFileBeingEncoded { get; set; } = String.Empty;
+		public static string currentFileBeingEncoded { get; set; } = string.Empty;
 
 		public static readonly string LINUX_PLEX_PRESET = "/var/lib/handbrakecli/PlexHandbrake.json";
 		public static readonly string WINDOWS_PLEX_PRESET = @"E:\Libraries\Documents\Plex Presets\PlexHandbrake.json";
+		public static readonly string CONFIG_NAME = $@"{System.Environment.CurrentDirectory}\RemoteHandbrakeController_Config.xml";
 
+		/// <summary>
+		/// Saves config file through XML Serializer
+		/// </summary>
+		/// <param name="strFile"> Full path and filename to be saved </param>
+		/// <param name="xmlConfig"> The Config file object </param>
+		/// <returns></returns>
+		public static bool SaveConfig(string strFile, XMLConfig xmlConfig)
+		{
+			try
+			{
+				XmlSerializer xs = new XmlSerializer(xmlConfig.GetType());
+				StreamWriter writer = File.CreateText(strFile);
+				xs.Serialize(writer, xmlConfig);
+				writer.Flush();
+				writer.Close();
+				return true;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+				return false;
+			}
+			
+		}
+
+		/// <summary>
+		/// Loads config file through XML Serializer
+		/// </summary>
+		/// <param name="strFile"></param>
+		/// <returns></returns>
+		public static XMLConfig LoadConfig(string strFile)
+		{
+			try
+			{
+				XmlSerializer xs = new XmlSerializer(typeof(XMLConfig));
+				StreamReader reader = File.OpenText(strFile);
+				XMLConfig xmlConfig = (XMLConfig)xs.Deserialize(reader);
+				reader.Close();
+				return xmlConfig;
+			}
+			catch
+			{
+				return null;
+			}
+			
+		}
+
+		/// <summary>
+		/// Builds proper input path for encoded file
+		/// </summary>
+		/// <param name="inputFile"></param>
+		/// <returns></returns>
 		public static string BuildInputString(FileInfo inputFile)
 		{
 			string strInput = string.Empty;

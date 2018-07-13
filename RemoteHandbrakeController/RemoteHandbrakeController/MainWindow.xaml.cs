@@ -18,16 +18,24 @@ namespace RemoteHandbrakeController
 	public partial class MainWindow : Window
 	{
 		List<FileInfo> lstFilesToBeEncoded = new List<FileInfo>();
+		XMLConfig xmlConfig;
 
 		/// <summary> Constructor</summary>
 		public MainWindow()
 		{
+			xmlConfig = Globals.LoadConfig(Globals.CONFIG_NAME);
+			if (xmlConfig == null)
+			{
+				xmlConfig = new XMLConfig();
+				Globals.SaveConfig(Globals.CONFIG_NAME, xmlConfig);
+			}
+
 			System.Timers.Timer timerStatus = new System.Timers.Timer();
 			timerStatus.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 			timerStatus.Interval = 1500;
 			timerStatus.Enabled = true;
 
-			MediaSelectionPage mediaSelectionPage = new MediaSelectionPage();
+			MediaSelectionPage mediaSelectionPage = new MediaSelectionPage(xmlConfig);
 			InitializeComponent();
 			MainFrame.Navigate(mediaSelectionPage);
 		}
@@ -35,7 +43,7 @@ namespace RemoteHandbrakeController
 		#region MENU_CLICKS
 		private void mnuConfig_Click(object sender, RoutedEventArgs e)
 		{
-			ConfigurationPage pageConfig = new ConfigurationPage((Page)MainFrame.Content);
+			ConfigurationPage pageConfig = new ConfigurationPage(xmlConfig);
 			MainFrame.Navigate(pageConfig);
 		}
 

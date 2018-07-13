@@ -8,6 +8,11 @@
       d:DesignHeight="600" d:DesignWidth="800"
       Title="MediaSelection"
 	  ShowsNavigationUI="False">
+	<Page.Resources>
+		<ContextMenu x:Key="LibRightClick">
+			<MenuItem Header="Delete" Click="LibDeleteButton_Click"/>
+		</ContextMenu>
+	</Page.Resources>
 	<DockPanel>
 		<Grid Background="Gray">
 			<Grid.ColumnDefinitions>
@@ -17,17 +22,29 @@
 
 			<Grid Grid.Column="0">
 				<Grid.RowDefinitions>
-					<RowDefinition Height="20"/>
 					<RowDefinition Height="50"/>
 					<RowDefinition Height="*"/>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="*"/>
+					<RowDefinition Height="40"/>
 				</Grid.RowDefinitions>
 
-				<Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Content="Select Library" FontSize="20" FontWeight="Bold"/>
-				<Button Name="btnMovies" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Movies" FontSize="15" Width="100" Height="50" Click="BtnMovies_Clicked"/>
-				<Button Name="btnTV" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="TV Shows" FontSize="15" Width="100" Height="50" Click="BtnTV_Clicked"/>
-				<Button Name="btnAnime" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Anime" FontSize="15" Width="100" Height="50" Click="BtnAnime_Clicked"/>
+				<Label Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Center" Content="Select Library" FontSize="20" FontWeight="Bold"/>
+				<ListBox Name="lstInputs" Grid.Row="1" BorderThickness="5,5,5,0" BorderBrush="Gray" ItemsSource="{Binding inputDirectories, Mode=TwoWay}" SelectedValuePath="DirectoryPath">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Name}" ToolTip="{Binding DirectoryPath}" FontSize="18" ContextMenu="{StaticResource LibRightClick}"/>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+					<ListBox.ItemContainerStyle>
+						<Style TargetType="ListBoxItem">
+							<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+						</Style>
+					</ListBox.ItemContainerStyle>
+				</ListBox>
+
+				<StackPanel Grid.Row="2" Orientation="Horizontal">
+					<Button Content="Load" FontSize="15" Width="100" BorderThickness="5" BorderBrush="Gray" Click="BtnLoad_Clicked"/>
+					<Button Content="Add Library" FontSize="15" Width="100" BorderThickness="5" BorderBrush="Gray" Click="BtnAddLib_Clicked"/>
+				</StackPanel>
 			</Grid>
 
 			<Grid Grid.Column="1">

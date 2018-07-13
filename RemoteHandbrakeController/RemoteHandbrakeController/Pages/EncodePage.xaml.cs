@@ -24,6 +24,8 @@ namespace RemoteHandbrakeController
 		private Process procWnds;
 		private SshCommand cmdCurrent;
 		private BackgroundWorker workerEncode;
+		private XMLConfig xmlConfig;
+		private MediaSelectionPage mediaSelectionPage;
 
 		private ObservableCollection<FileInfo> _lstFilesToEncode;
 		public ObservableCollection<FileInfo> lstFilesToEncode
@@ -42,9 +44,11 @@ namespace RemoteHandbrakeController
 		/// Constructor
 		/// </summary>
 		/// <param name="lstFiles"></param>
-		public EncodePage(List<FileInfo> lstFiles)
+		public EncodePage(List<FileInfo> lstFiles, XMLConfig config, MediaSelectionPage mediaPage)
 		{
 			lstFilesToEncode = new ObservableCollection<FileInfo>(lstFiles);
+			mediaSelectionPage = mediaPage;
+			xmlConfig = config;
 			InitializeComponent();
 			this.DataContext = this;
 		}
@@ -310,14 +314,12 @@ namespace RemoteHandbrakeController
 				var response = MessageBox.Show("Are you sure you want to cancel?", "CANCEL", MessageBoxButton.YesNo);
 				if (response == MessageBoxResult.Yes)
 				{
-					MediaSelectionPage pageMediaSelection = new MediaSelectionPage();
-					NavigationService.Navigate(pageMediaSelection);
+					NavigationService.Navigate(mediaSelectionPage);
 				}
 			}
 			else
 			{
-				MediaSelectionPage pageMediaSelection = new MediaSelectionPage();
-				NavigationService.Navigate(pageMediaSelection);
+				NavigationService.Navigate(mediaSelectionPage);
 			}
 		}
 		#endregion

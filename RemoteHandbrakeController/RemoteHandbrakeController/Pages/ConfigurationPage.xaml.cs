@@ -12,13 +12,12 @@ namespace RemoteHandbrakeController
 	/// </summary>
 	public partial class ConfigurationPage : Page
 	{
-		private Page pagePrevious { get; set; }
-
+		XMLConfig xmlConfig;
 		/// <summary> Constructor </summary>
 		/// <param name="p"></param>
-		public ConfigurationPage(Page p)
+		public ConfigurationPage(XMLConfig config)
 		{
-			pagePrevious = p;
+			xmlConfig = config;
 			InitializeComponent();
 		}
 
@@ -46,7 +45,7 @@ namespace RemoteHandbrakeController
 		/// <param name="e"></param>
 		private void btnBack_Click(object sender, RoutedEventArgs e)
 		{
-			NavigationService.Navigate(pagePrevious);
+			NavigationService.GoBack();
 		}
 
 		/// <summary> Sets path for HandbrakeCLI.exe locally </summary>

@@ -9,9 +9,9 @@
 	  ShowsNavigationUI="False"
       Title="EncodePage">
 	<DockPanel>
-		<Grid Background="DodgerBlue">
+		<Grid Background="Gray">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="250"/>
+				<ColumnDefinition Width="290"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>

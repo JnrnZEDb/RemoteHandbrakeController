@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,44 +18,83 @@ namespace RemoteHandbrakeController
 	/// </summary>
 	public partial class MediaSelectionPage : Page
 	{
-		List<FileInfo> lstFilesToBeEncoded = new List<FileInfo>();
+		public ObservableCollection<InputDirectory> inputDirectories { get; set; }
 
-		public MediaSelectionPage()
+		List<FileInfo> lstFilesToBeEncoded = new List<FileInfo>();		
+		private XMLConfig xmlConfig;
+
+		public MediaSelectionPage(XMLConfig config)
 		{
 			InitializeComponent();
+			DataContext = this;
+
+			xmlConfig = config;
+			inputDirectories = new ObservableCollection<InputDirectory>(xmlConfig.InputDirectories);
 		}
 
 		#region BUTTON_CLICKS
-		private void BtnMovies_Clicked(object sender, RoutedEventArgs e)
+		private void BtnLoad_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles, $"{Properties.Settings.Default.INPUT_SCAN_DIRECTORY}Movies");
+			ListDirectory(treeFiles, (string)lstInputs.SelectedValue);
 		}
 
-		private void BtnTV_Clicked(object sender, RoutedEventArgs e)
+		private void BtnAddLib_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles,$"{Properties.Settings.Default.INPUT_SCAN_DIRECTORY}TV Shows");
-		}
-
-		private void BtnAnime_Clicked(object sender, RoutedEventArgs e)
-		{
-			ListDirectory(treeFiles, $"{Properties.Settings.Default.INPUT_SCAN_DIRECTORY}Anime");
+			InputDirectory inputDirectory;
+			AddLibrary wndAddLib = new AddLibrary();
+			if (wndAddLib.ShowDialog() == true)
+			{
+				inputDirectory = new InputDirectory(wndAddLib.LibraryName, wndAddLib.Path);
+				xmlConfig.InputDirectories.Add(inputDirectory);
+				Globals.SaveConfig(Globals.CONFIG_NAME, xmlConfig);
+				inputDirectories.Add(inputDirectory);
+			}
+			wndAddLib = null;
 		}
 
 		private void BtnEncode_Click(object sender, RoutedEventArgs e)
 		{
+			if (treeFiles.Items.Count == 0)
+			{
+				MessageBox.Show("No input has been loaded.", "ERROR");
+				return;
+			}
 			try
 			{
 				lstFilesToBeEncoded.Clear();
 				FindChecked((TreeViewItem)treeFiles.Items.GetItemAt(0));
-				EncodePage pageEncode = new EncodePage(lstFilesToBeEncoded);
+				if (lstFilesToBeEncoded.Count == 0)
+				{
+					MessageBox.Show("No files were selected.", "ERROR");
+					return;
+				}
+				EncodePage pageEncode = new EncodePage(lstFilesToBeEncoded, xmlConfig, this);
+				treeFiles.Items.Clear();
 				NavigationService.Navigate(pageEncode);
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show($"Error: {ex.Message}", "ERROR", MessageBoxButton.OK);
-			}
-			
+				MessageBox.Show($"Error: {ex.Message}", "ERROR");
+			}	
 		}
+
+		/// <summary>
+		/// Right click on library item, select Delete
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void LibDeleteButton_Click(object sender, RoutedEventArgs e)
+		{
+			MenuItem menuItem = sender as MenuItem;
+			if (menuItem != null)
+			{
+				TextBlock txt = ((ContextMenu)menuItem.Parent).PlacementTarget as TextBlock;
+				xmlConfig.InputDirectories.Remove((InputDirectory)txt.DataContext);
+				Globals.SaveConfig(Globals.CONFIG_NAME, xmlConfig);
+				inputDirectories.Remove((InputDirectory)txt.DataContext);
+			}
+		}
+
 		#endregion
 
 		#region FUNCTIONS
