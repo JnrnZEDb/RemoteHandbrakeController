@@ -16,8 +16,9 @@ https://handbrake.fr/docs/en/latest/developer/build-linux.html
 https://wiki.ubuntu.com/MountWindowsSharesPermanently
 
 ## Versions
-### Current Version: 1.0.0
-Basic functionality is there.
+### Current Version: 1.1.0
+Added XML Config that is saved to ProgramData.
 
 ## Current Tasks
-Convert config into separate XML config.  Will use for additional functionality.
+Cleanup.
+More tasks to come.
