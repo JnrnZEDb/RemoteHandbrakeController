@@ -60,7 +60,7 @@ namespace RemoteHandbrakeController
 		/// <param name="command"></param>
 		private bool DoLinuxCommand(string command, SshClient linuxClient)
 		{
-			if (Properties.Settings.Default.TEST_MODE) command = $"ping {Properties.Settings.Default.PLEX_IP} -c 5";
+			if (xmlConfig.PingTestMode) command = $"ping {xmlConfig.PlexIP} -c 5";
 
 			Dispatcher.BeginInvoke(new Action(delegate
 			{
@@ -104,14 +104,14 @@ namespace RemoteHandbrakeController
 			try
 			{
 				procWnds = new Process();
-				if (Properties.Settings.Default.TEST_MODE)
+				if (xmlConfig.PingTestMode)
 				{
 					procWnds.StartInfo.FileName = "cmd.exe";
 					procWnds.StartInfo.Arguments = "/C ping 127.0.0.1";
 				}
 				else
 				{
-					procWnds.StartInfo.FileName = Properties.Settings.Default.LOCAL_HANDBRAKECLI_PATH;
+					procWnds.StartInfo.FileName = xmlConfig.LocalHandbrakeCLIPath;
 					procWnds.StartInfo.Arguments = arguments;
 				}
 				
@@ -154,9 +154,9 @@ namespace RemoteHandbrakeController
 			for (int i = 0; i < lstFilesToEncode.Count;)
 			{
 				Globals.currentFileBeingEncoded = lstFilesToEncode[i].Name;
-				HandbrakeCommand cmd = new HandbrakeCommand(Globals.BuildInputString(lstFilesToEncode[i]), Globals.BuildOutputString(lstFilesToEncode[i]));
+				HandbrakeCommand cmd = new HandbrakeCommand(Globals.BuildInputString(lstFilesToEncode[i], xmlConfig), Globals.BuildOutputString(lstFilesToEncode[i], xmlConfig));
 				// WINDOWS MODE
-				if (Properties.Settings.Default.LOCAL_WINDOWS_MODE)
+				if (xmlConfig.LocalWindowsMode)
 				{
 					cmd.HandBrakePreset = Globals.WINDOWS_PLEX_PRESET;
 					string strCurrentFile = lstFilesToEncode[i].Name;
@@ -186,7 +186,7 @@ namespace RemoteHandbrakeController
 				{
 					try
 					{
-						using (var client = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, strPassword))
+						using (var client = new SshClient(xmlConfig.PlexIP, xmlConfig.Username, strPassword))
 						{
 							client.Connect();
 							string strCurrentFile = lstFilesToEncode[i].Name;
@@ -234,7 +234,7 @@ namespace RemoteHandbrakeController
 				int iProgress = (int)Convert.ToDouble(strProgress.Substring(0, 4));
 				prgEncode.Value = iProgress;
 			}
-			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE) txtOutput.AppendText($"{strOutput}\n");
+			if (xmlConfig.LocalWindowsMode) txtOutput.AppendText($"{strOutput}\n");
 			else txtOutput.AppendText(strOutput);
 			txtOutput.ScrollToEnd();
 		}
@@ -273,7 +273,7 @@ namespace RemoteHandbrakeController
 			{
 				if (!bCurrentlyEncoding)
 				{
-					if (!Properties.Settings.Default.LOCAL_WINDOWS_MODE)
+					if (!xmlConfig.LocalWindowsMode)
 					{
 						strPassword = string.Empty;
 						PasswordPrompt passPrompt = new PasswordPrompt();

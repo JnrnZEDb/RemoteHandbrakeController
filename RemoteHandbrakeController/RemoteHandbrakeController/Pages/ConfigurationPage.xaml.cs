@@ -19,6 +19,7 @@ namespace RemoteHandbrakeController
 		{
 			xmlConfig = config;
 			InitializeComponent();
+			DataContext = config;
 		}
 
 		#region BUTTON_CLICKS
@@ -29,8 +30,7 @@ namespace RemoteHandbrakeController
 		{
 			try
 			{
-				Properties.Settings.Default.Save();
-				Properties.Settings.Default.Reload();
+				Globals.SaveConfig(Globals.CONFIG_NAME, xmlConfig);
 			}
 			catch
 			{
@@ -61,23 +61,7 @@ namespace RemoteHandbrakeController
 			if (result == true)
 			{
 				txtHandbrakeCLI_Path.Text = pathDialog.FileName;
-				Properties.Settings.Default.LOCAL_HANDBRAKECLI_PATH = txtHandbrakeCLI_Path.Text;
-			}
-		}
-
-		/// <summary> Sets path for video input files </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnInputDirPath_Click(object sender, RoutedEventArgs e)
-		{
-			using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
-			{
-				System.Windows.Forms.DialogResult dlgResult = dialog.ShowDialog();
-				if (dlgResult == System.Windows.Forms.DialogResult.OK)
-				{
-					txtScanInput.Text = dialog.SelectedPath;
-					Properties.Settings.Default.INPUT_SCAN_DIRECTORY = txtScanInput.Text;
-				}
+				xmlConfig.LocalHandbrakeCLIPath = txtHandbrakeCLI_Path.Text;
 			}
 		}
 
@@ -92,7 +76,7 @@ namespace RemoteHandbrakeController
 				if (dlgResult == System.Windows.Forms.DialogResult.OK)
 				{
 					txtLocalOutput.Text = dialog.SelectedPath;
-					Properties.Settings.Default.LOCAL_OUTPUT = txtLocalOutput.Text;
+					xmlConfig.LocalOutputDirectory = txtLocalOutput.Text;
 				}
 			}
 		}
@@ -116,7 +100,7 @@ namespace RemoteHandbrakeController
 			passPrompt = null;
 			try
 			{
-				using (var testClient = new SshClient(Properties.Settings.Default.PLEX_IP, Properties.Settings.Default.USERNAME, password))
+				using (var testClient = new SshClient(xmlConfig.PlexIP, xmlConfig.Username, password))
 				{
 					testClient.ConnectionInfo.Timeout = TimeSpan.FromSeconds(10);
 					testClient.Connect();

@@ -20,6 +20,8 @@ namespace RemoteHandbrakeController
 		List<FileInfo> lstFilesToBeEncoded = new List<FileInfo>();
 		XMLConfig xmlConfig;
 
+		ConfigurationPage pageConfig;
+
 		/// <summary> Constructor</summary>
 		public MainWindow()
 		{
@@ -43,7 +45,7 @@ namespace RemoteHandbrakeController
 		#region MENU_CLICKS
 		private void mnuConfig_Click(object sender, RoutedEventArgs e)
 		{
-			ConfigurationPage pageConfig = new ConfigurationPage(xmlConfig);
+			pageConfig = new ConfigurationPage(xmlConfig);
 			MainFrame.Navigate(pageConfig);
 		}
 
@@ -71,10 +73,10 @@ namespace RemoteHandbrakeController
 			if (Globals.currentFileBeingEncoded != String.Empty) Dispatcher.Invoke(() => txtCurrentFile.Text = $"CURRENTLY ENCODING { Globals.currentFileBeingEncoded}");
 			else Dispatcher.Invoke(() => txtCurrentFile.Text = String.Empty);
 
-			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE) Dispatcher.Invoke(() => txtMode.Text = "LOCAL WINDOWS MODE");
+			if (xmlConfig.LocalWindowsMode) Dispatcher.Invoke(() => txtMode.Text = "LOCAL WINDOWS MODE");
 			else Dispatcher.Invoke(() => txtMode.Text = "REMOTE LINUX MODE");
 
-			if (Properties.Settings.Default.TEST_MODE) Dispatcher.Invoke(() => txtTestMode.Text = "TEST MODE");
+			if (xmlConfig.PingTestMode) Dispatcher.Invoke(() => txtTestMode.Text = "TEST MODE");
 			else Dispatcher.Invoke(() => txtTestMode.Text = "ENCODE MODE");
 		}
 					

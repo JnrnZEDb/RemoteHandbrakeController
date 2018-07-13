@@ -65,11 +65,11 @@ namespace RemoteHandbrakeController
 		/// </summary>
 		/// <param name="inputFile"></param>
 		/// <returns></returns>
-		public static string BuildInputString(FileInfo inputFile)
+		public static string BuildInputString(FileInfo inputFile, XMLConfig config)
 		{
 			string strInput = string.Empty;
 			// Local Windows Mode
-			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE)
+			if (config.LocalWindowsMode)
 			{
 				strInput = inputFile.FullName;
 			}
@@ -78,7 +78,7 @@ namespace RemoteHandbrakeController
 			{
 				if (inputFile.FullName.Contains("Movies"))
 				{
-					strInput = $@"'{Properties.Settings.Default.LINUX_INPUT_DIRECTORY}/Movies/{inputFile.Name}'";
+					strInput = $@"'{config.RemoteInputDirectory}/Movies/{inputFile.Name}'";
 				}
 				else
 				{
@@ -88,11 +88,11 @@ namespace RemoteHandbrakeController
 
 					if (inputFile.FullName.Contains("TV Shows"))
 					{
-						strInput = $@"'{Properties.Settings.Default.LINUX_INPUT_DIRECTORY}/TV Shows/{strShow}/{strSeason}/{inputFile.Name}'";
+						strInput = $@"'{config.RemoteInputDirectory}/TV Shows/{strShow}/{strSeason}/{inputFile.Name}'";
 					}
 					else if (inputFile.FullName.Contains("Anime"))
 					{
-						strInput = $@"'{Properties.Settings.Default.LINUX_INPUT_DIRECTORY}/Anime/{strShow}/{strSeason}/{inputFile.Name}'";
+						strInput = $@"'{config.RemoteInputDirectory}/Anime/{strShow}/{strSeason}/{inputFile.Name}'";
 					}
 				}	
 			}
@@ -104,15 +104,15 @@ namespace RemoteHandbrakeController
 		/// </summary>
 		/// <param name="inputFile"></param>
 		/// <returns></returns> 
-		public static string BuildOutputString(FileInfo inputFile)
+		public static string BuildOutputString(FileInfo inputFile, XMLConfig config)
 		{
 			string outputDir = string.Empty;
 			// Local Windows Mode
-			if (Properties.Settings.Default.LOCAL_WINDOWS_MODE)
+			if (config.LocalWindowsMode)
 			{
 				if (inputFile.FullName.Contains("Movies"))
 				{
-					outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\Movies (Encoded)\{inputFile.Name.Replace("mkv", "m4v")}";
+					outputDir = $@"{config.LocalOutputDirectory}\Movies (Encoded)\{inputFile.Name.Replace("mkv", "m4v")}";
 				}
 				else
 				{
@@ -122,13 +122,13 @@ namespace RemoteHandbrakeController
 
 					if (inputFile.FullName.Contains("TV Shows"))
 					{
-						outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\TV Shows (Encoded)\{strShow}\{strSeason}";
+						outputDir = $@"{config.LocalOutputDirectory}\TV Shows (Encoded)\{strShow}\{strSeason}";
 						Directory.CreateDirectory(outputDir);
 						outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}";
 					}
 					else if (inputFile.FullName.Contains("Anime"))
 					{
-						outputDir = $@"{Properties.Settings.Default.LOCAL_OUTPUT}\Anime (Encoded)\{strShow}\{strSeason}";
+						outputDir = $@"{config.LocalOutputDirectory}\Anime (Encoded)\{strShow}\{strSeason}";
 						Directory.CreateDirectory(outputDir);
 						outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}";
 					}
@@ -139,7 +139,7 @@ namespace RemoteHandbrakeController
 			{
 				if (inputFile.FullName.Contains("Movies"))
 				{
-					outputDir = $@"'{Properties.Settings.Default.OUTPUT_DIRECTORY}/Movies (Encoded)/{inputFile.Name.Replace("mkv", "m4v")}'";
+					outputDir = $@"'{config.OutputDirectory}/Movies (Encoded)/{inputFile.Name.Replace("mkv", "m4v")}'";
 				}
 				else
 				{
@@ -149,14 +149,14 @@ namespace RemoteHandbrakeController
 
 					if (inputFile.FullName.Contains("TV Shows"))
 					{
-						outputDir = $@"'{Properties.Settings.Default.OUTPUT_DIRECTORY}/TV Shows (Encoded)/{strShow}/{strSeason}";
-						Directory.CreateDirectory($@"\\{Properties.Settings.Default.PLEX_IP}\Media\TV Shows (Encoded)\{strShow}\{strSeason}"); // Uses mapped network drive Z:/
+						outputDir = $@"'{config.OutputDirectory}/TV Shows (Encoded)/{strShow}/{strSeason}";
+						Directory.CreateDirectory($@"\\{config.PlexIP}\Media\TV Shows (Encoded)\{strShow}\{strSeason}"); // Uses mapped network drive Z:/
 						outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}'";
 					}
 					else if (inputFile.FullName.Contains("Anime"))
 					{
-						outputDir = $@"'{Properties.Settings.Default.OUTPUT_DIRECTORY}/Anime (Encoded)/{strShow}/{strSeason}";
-						Directory.CreateDirectory($@"\\{Properties.Settings.Default.PLEX_IP}\Media\Anime (Encoded)\{strShow}\{strSeason}"); // Uses mapped network drive Z:/
+						outputDir = $@"'{config.OutputDirectory}/Anime (Encoded)/{strShow}/{strSeason}";
+						Directory.CreateDirectory($@"\\{config.PlexIP}\Media\Anime (Encoded)\{strShow}\{strSeason}"); // Uses mapped network drive Z:/
 						outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}'";
 					}
 				}
