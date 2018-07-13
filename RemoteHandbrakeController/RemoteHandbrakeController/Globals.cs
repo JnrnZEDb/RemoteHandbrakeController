@@ -11,7 +11,7 @@ namespace RemoteHandbrakeController
 
 		public static readonly string LINUX_PLEX_PRESET = "/var/lib/handbrakecli/PlexHandbrake.json";
 		public static readonly string WINDOWS_PLEX_PRESET = @"E:\Libraries\Documents\Plex Presets\PlexHandbrake.json";
-		public static readonly string CONFIG_NAME = $@"{System.Environment.CurrentDirectory}\RemoteHandbrakeController_Config.xml";
+		public static readonly string CONFIG_NAME = $@"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\RemoteHandbrakeController\RemoteHandbrakeController_Config.xml";
 
 		/// <summary>
 		/// Saves config file through XML Serializer
@@ -24,6 +24,7 @@ namespace RemoteHandbrakeController
 			try
 			{
 				XmlSerializer xs = new XmlSerializer(xmlConfig.GetType());
+				Directory.CreateDirectory($@"{Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)}\RemoteHandbrakeController");
 				StreamWriter writer = File.CreateText(strFile);
 				xs.Serialize(writer, xmlConfig);
 				writer.Flush();

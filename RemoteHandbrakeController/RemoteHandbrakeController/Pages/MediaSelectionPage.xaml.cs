@@ -35,7 +35,10 @@ namespace RemoteHandbrakeController
 		#region BUTTON_CLICKS
 		private void BtnLoad_Clicked(object sender, RoutedEventArgs e)
 		{
-			ListDirectory(treeFiles, (string)lstInputs.SelectedValue);
+			if (inputDirectories.Count > 0 && lstInputs.SelectedValue != null)
+			{
+				ListDirectory(treeFiles, (string)lstInputs.SelectedValue);
+			}
 		}
 
 		private void BtnAddLib_Clicked(object sender, RoutedEventArgs e)
