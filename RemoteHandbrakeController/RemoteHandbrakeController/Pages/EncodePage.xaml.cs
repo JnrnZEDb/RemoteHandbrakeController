@@ -220,6 +220,7 @@ namespace RemoteHandbrakeController
 				}
 				if (workerEncode.CancellationPending) return;
 			}
+			return;
 		}
 
 		/// <summary> Updates Progress </summary>
