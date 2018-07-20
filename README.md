@@ -20,5 +20,5 @@ https://wiki.ubuntu.com/MountWindowsSharesPermanently
 Added XML Config that is saved to ProgramData.
 
 ## Current Tasks
-Cleanup.
-More tasks to come.
+BUG 1: When encoding finishes, it doesn't properly finish and reset itself.
+TASK 1: Pick encoding preset.
