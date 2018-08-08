@@ -75,6 +75,14 @@ namespace RemoteHandbrakeController
 			set { _remoteInputDirectory = value; }
 		}
 
+		private string _CustomHandbrakePresetsDirectory;
+		/// <summary> Location of custom handbrake presets (.json files) </summary>
+		public string CustomHandbrakePresetsDirectory
+		{
+			get { return _CustomHandbrakePresetsDirectory; }
+			set { _CustomHandbrakePresetsDirectory = value; }
+		}
+
 		/// <summary> List of input directories to scan from </summary>
 		public List<InputDirectory> InputDirectories { get; set; }
 
@@ -87,6 +95,7 @@ namespace RemoteHandbrakeController
 			_localHandbrakeCLIPath = @"C:\Program Files (x86)\";
 			_localOutputDirectory = @"E:\Libraries\Videos";
 			_remoteInputDirectory = @"/media/windowsmedia";
+			_CustomHandbrakePresetsDirectory = @"Z:\";
 			_localWindowsMode = false;
 			_pingTestMode = false;
 			InputDirectories = new List<InputDirectory>();

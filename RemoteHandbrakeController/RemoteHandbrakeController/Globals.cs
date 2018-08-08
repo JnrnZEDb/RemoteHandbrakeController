@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
-using System.Xml;
+using System.Linq;
+using System.Reflection;
 using System.Xml.Serialization;
 
 namespace RemoteHandbrakeController
@@ -164,5 +166,21 @@ namespace RemoteHandbrakeController
 			}
 			return outputDir;
 		}
+
+		#region EXTENSION_METHODS
+		/// <summary> Enum extension method - gets enum description </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string GetDescription(this Enum value)
+		{
+			return
+				value
+					.GetType()
+					.GetMember(value.ToString())
+					.FirstOrDefault()
+					?.GetCustomAttribute<DescriptionAttribute>()
+					?.Description;
+		}
+		#endregion
 	}
 }

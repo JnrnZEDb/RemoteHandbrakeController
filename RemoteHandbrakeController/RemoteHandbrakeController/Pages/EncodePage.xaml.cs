@@ -30,15 +30,11 @@ namespace RemoteHandbrakeController
 		private ObservableCollection<FileInfo> _lstFilesToEncode;
 		public ObservableCollection<FileInfo> lstFilesToEncode
 		{
-			get
-			{
-				return _lstFilesToEncode;
-			}
-			set
-			{
-				_lstFilesToEncode = value;
-			}
+			get { return _lstFilesToEncode;	}
+			set { _lstFilesToEncode = value; }
 		}
+
+		public ObservableCollection<Preset> lstPresets { get; set; }
 
 		/// <summary>
 		/// Constructor
@@ -47,8 +43,20 @@ namespace RemoteHandbrakeController
 		public EncodePage(List<FileInfo> lstFiles, XMLConfig config, MediaSelectionPage mediaPage)
 		{
 			lstFilesToEncode = new ObservableCollection<FileInfo>(lstFiles);
+			lstPresets = new ObservableCollection<Preset>();
 			mediaSelectionPage = mediaPage;
 			xmlConfig = config;
+
+			foreach (Presets preset in Enum.GetValues(typeof(Presets)))
+			{
+				lstPresets.Add(new Preset(preset.GetDescription(), false));
+			}
+			string[] customPresets = Directory.GetFiles(xmlConfig.CustomHandbrakePresetsDirectory, "*.json");
+			foreach (string preset in customPresets)
+			{
+				lstPresets.Add(new Preset(preset.Remove(0, xmlConfig.CustomHandbrakePresetsDirectory.Length), true));
+			}
+
 			InitializeComponent();
 			this.DataContext = this;
 		}
@@ -154,7 +162,9 @@ namespace RemoteHandbrakeController
 			for (int i = 0; i < lstFilesToEncode.Count;)
 			{
 				Globals.currentFileBeingEncoded = lstFilesToEncode[i].Name;
-				HandbrakeCommand cmd = new HandbrakeCommand(Globals.BuildInputString(lstFilesToEncode[i], xmlConfig), Globals.BuildOutputString(lstFilesToEncode[i], xmlConfig));
+				string strPreset = $"{xmlConfig.OutputDirectory}/{((Preset)comboPresets.SelectedItem).PresetName}";
+				bool bImport = ((Preset)comboPresets.SelectedItem).IsImport;
+				HandbrakeCommand cmd = new HandbrakeCommand(Globals.BuildInputString(lstFilesToEncode[i], xmlConfig), Globals.BuildOutputString(lstFilesToEncode[i], xmlConfig), strPreset, bImport);
 				// WINDOWS MODE
 				if (xmlConfig.LocalWindowsMode)
 				{
@@ -323,6 +333,19 @@ namespace RemoteHandbrakeController
 				NavigationService.Navigate(mediaSelectionPage);
 			}
 		}
-		#endregion
+	#endregion
+	}
+
+	/// <summary> Preset class </summary>
+	public class Preset
+	{
+		public Preset(String presetName, bool bIsImport)
+		{
+			PresetName = presetName;
+			IsImport = bIsImport;
+		}
+
+		public String PresetName { get; set; }
+		public bool IsImport { get; set; }
 	}
 }

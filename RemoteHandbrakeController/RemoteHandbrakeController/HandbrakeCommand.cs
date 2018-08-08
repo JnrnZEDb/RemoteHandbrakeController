@@ -24,21 +24,30 @@ namespace RemoteHandbrakeController
 		/// <param name="inputFile"></param>
 		/// <param name="outputDir"></param>
 		/// <param name="preset"></param>
-		public HandbrakeCommand(string inputFile, string outputDir, string preset)
+		public HandbrakeCommand(string inputFile, string outputDir, string preset, bool import = false)
 		{
 			m_strInputFile = inputFile;
 			m_strOutputDir = outputDir;
 			HandBrakePreset = preset;
+			m_bIsImport = import;
 		}
 
-		public string HandBrakePreset { get; set; } = "/var/lib/handbrakecli/PlexHandbrake.json";
+		public string HandBrakePreset { get; set; }
 
 		private string m_strInputFile { get; set; }
 		private string m_strOutputDir { get; set; }
+		private bool m_bIsImport { get; set; }
 
 		public override string ToString()
 		{
-			return $"HandBrakeCLI -i {m_strInputFile} -o {m_strOutputDir} --preset-import-file {HandBrakePreset}";
+			if (m_bIsImport)
+			{
+				return $"HandBrakeCLI -i {m_strInputFile} -o {m_strOutputDir} --preset-import-file {HandBrakePreset}";
+			}
+			else
+			{
+				return $"HandBrakeCLI -i {m_strInputFile} -o {m_strOutputDir} --preset \"{HandBrakePreset}\"";
+			}
 		}
 
 	}

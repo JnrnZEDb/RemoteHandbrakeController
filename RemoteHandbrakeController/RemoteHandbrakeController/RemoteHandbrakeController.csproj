@@ -94,6 +94,7 @@
     <Compile Include="AddLibrary.xaml.cs">
       <DependentUpon>AddLibrary.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EnumPresets.cs" />
     <Compile Include="XMLConfig.cs" />
     <Page Include="About.xaml">
       <SubType>Designer</SubType>

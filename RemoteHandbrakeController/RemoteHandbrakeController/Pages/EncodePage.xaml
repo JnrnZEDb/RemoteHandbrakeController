@@ -15,10 +15,22 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
+				<RowDefinition Height="30"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 
-			<Grid Grid.Column="0" Grid.Row="0">
+			<DockPanel Grid.Column="1" HorizontalAlignment="Stretch">
+				<Label Content="Encoding Preset" FontSize="16"/>
+				<ComboBox Name="comboPresets" ItemsSource="{Binding lstPresets}" SelectedIndex="0">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PresetName}" FontSize="15"/>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</DockPanel>
+
+			<Grid Grid.Column="0" Grid.Row="1">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*"/>
 					<RowDefinition Height="30"/>
@@ -39,7 +51,7 @@
 					<Button Name="btnBack" Grid.Column="1" Content="BACK" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btnBack_Click"/>
 				</Grid>
 			</Grid>
-			<Grid Grid.Column="1">
+			<Grid Grid.Row="1" Grid.Column="1">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*"/>
 					<RowDefinition Height="30"/>

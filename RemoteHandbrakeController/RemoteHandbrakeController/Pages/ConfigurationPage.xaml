@@ -80,25 +80,28 @@
 						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="60"/>
 					</Grid.ColumnDefinitions>
-					
+
 					<!--LOCAL_WINDOWS_MODE-->
-					<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Local Mode" FontSize="19" FontWeight="Bold"/>
-					<CheckBox Name="chkLocalWindowsMode" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Runs a Windows cmd (vs Linux) and uses local PC (127.0.0.1) for testing"  
+					<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Local Mode" FontSize="19" FontWeight="Bold"/>
+					<CheckBox Name="chkLocalWindowsMode" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Runs a Windows cmd (vs Linux) and uses local PC (127.0.0.1) for testing"  
 					  IsChecked="{Binding Path=LocalWindowsMode, Mode=TwoWay}">
 						<CheckBox.LayoutTransform>
 							<ScaleTransform ScaleX="2" ScaleY="2"/>
 						</CheckBox.LayoutTransform>
 					</CheckBox>
 					<!--TEST_MODE-->
-					<Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Test Mode" FontSize="19" FontWeight="Bold"/>
-					<CheckBox Name="chkTestMode" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Will do a ping command instead of encoding for simple testing"  
+					<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Test Mode" FontSize="19" FontWeight="Bold"/>
+					<CheckBox Name="chkTestMode" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" ToolTip="Will do a ping command instead of encoding for simple testing"  
 					  IsChecked="{Binding Path=PingTestMode, Mode=TwoWay}">
 						<CheckBox.LayoutTransform>
 							<ScaleTransform ScaleX="2" ScaleY="2"/>
 						</CheckBox.LayoutTransform>
 					</CheckBox>
+					<!--INPUT-->
+					<TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Custom Handbrake Presets" FontSize="19" FontWeight="Bold" TextWrapping="Wrap"/>
+					<TextBox Name="txtCustomHandbrakePresetsDirectory" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18" 
+							 Text="{Binding Path=CustomHandbrakePresetsDirectory, Mode=TwoWay}" ToolTip="Directory which contains any Custom Handbrake Presets (.json files)"/>
 				</Grid>
-				
 			</GroupBox>
 			<Grid Grid.Row="3">
 				<Grid>
