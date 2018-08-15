@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BB7FDEB606ECFE05B813C7EF22DC3AEA"
+        "OwnerKey" = "8:_E0B5E9F0614A14E6C2B583FE7AD4657D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E0B5E9F0614A14E6C2B583FE7AD4657D"
+        "OwnerKey" = "8:_BB7FDEB606ECFE05B813C7EF22DC3AEA"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -336,15 +336,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RemoteHandbrakeController"
-        "ProductCode" = "8:{910043BF-1326-4A37-922B-BBD5D8CE1CEE}"
-        "PackageCode" = "8:{59B21FF4-AD1A-4466-BED6-7BB552BD0A89}"
+        "ProductCode" = "8:{265D55AE-C929-43AC-B53C-0149A0948587}"
+        "PackageCode" = "8:{8802C2B1-9D5D-46E7-82F2-25F0FFD564B6}"
         "UpgradeCode" = "8:{6CDF8B18-B088-49E2-9034-DAB6DB83A30C}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.1.1"
+        "ProductVersion" = "8:1.2.0"
         "Manufacturer" = "8:Daniel Shinevar"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
