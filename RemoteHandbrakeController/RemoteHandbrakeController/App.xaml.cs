@@ -28,8 +28,6 @@ namespace RemoteHandbrakeController
 					p.Dispose();
 				}
 			}
-			
-
 		}
 	}
 }

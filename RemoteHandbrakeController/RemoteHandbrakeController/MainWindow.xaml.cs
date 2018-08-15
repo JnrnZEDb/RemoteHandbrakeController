@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Configuration;
+using System.ComponentModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Timers;
 using System.IO;
 using System.Windows;
@@ -19,6 +17,7 @@ namespace RemoteHandbrakeController
 	{
 		List<FileInfo> lstFilesToBeEncoded = new List<FileInfo>();
 		XMLConfig xmlConfig;
+		Timer timerStatus;
 
 		ConfigurationPage pageConfig;
 
@@ -32,7 +31,7 @@ namespace RemoteHandbrakeController
 				Globals.SaveConfig(Globals.CONFIG_NAME, xmlConfig);
 			}
 
-			System.Timers.Timer timerStatus = new System.Timers.Timer();
+			timerStatus = new Timer();
 			timerStatus.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 			timerStatus.Interval = 1500;
 			timerStatus.Enabled = true;
@@ -78,6 +77,15 @@ namespace RemoteHandbrakeController
 
 			if (xmlConfig.PingTestMode) Dispatcher.Invoke(() => txtTestMode.Text = "TEST MODE");
 			else Dispatcher.Invoke(() => txtTestMode.Text = "ENCODE MODE");
+		}
+
+		/// <summary> Events when window is closing </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		void MainWindow_Closing(object sender, CancelEventArgs e)
+		{
+			timerStatus.Stop();
+			timerStatus.Close();
 		}
 					
 	}

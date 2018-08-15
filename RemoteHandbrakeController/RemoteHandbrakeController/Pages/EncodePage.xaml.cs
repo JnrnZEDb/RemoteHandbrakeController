@@ -26,6 +26,7 @@ namespace RemoteHandbrakeController
 		private BackgroundWorker workerEncode;
 		private XMLConfig xmlConfig;
 		private MediaSelectionPage mediaSelectionPage;
+		private Preset selectedPreset;
 
 		private ObservableCollection<FileInfo> _lstFilesToEncode;
 		public ObservableCollection<FileInfo> lstFilesToEncode
@@ -162,8 +163,17 @@ namespace RemoteHandbrakeController
 			for (int i = 0; i < lstFilesToEncode.Count;)
 			{
 				Globals.currentFileBeingEncoded = lstFilesToEncode[i].Name;
-				string strPreset = $"{xmlConfig.OutputDirectory}/{((Preset)comboPresets.SelectedItem).PresetName}";
-				bool bImport = ((Preset)comboPresets.SelectedItem).IsImport;
+				bool bImport = selectedPreset.IsImport;
+				string strPreset;
+				if (bImport)
+				{
+					strPreset = $"{xmlConfig.OutputDirectory}/{selectedPreset.PresetName}";
+				}
+				else
+				{
+					strPreset = selectedPreset.PresetName;
+				}			 
+				
 				HandbrakeCommand cmd = new HandbrakeCommand(Globals.BuildInputString(lstFilesToEncode[i], xmlConfig), Globals.BuildOutputString(lstFilesToEncode[i], xmlConfig), strPreset, bImport);
 				// WINDOWS MODE
 				if (xmlConfig.LocalWindowsMode)
@@ -270,6 +280,7 @@ namespace RemoteHandbrakeController
 			bCurrentlyEncoding = false;
 			btnStartStopEncode.Content = "START";
 			btnBack.IsEnabled = true;
+			comboPresets.IsEnabled = true;
 			if (workerEncode.CancellationPending) txtOutput.AppendText("ENCODING CANCELLED BY USER\n");
 			txtOutput.ScrollToEnd();
 			prgEncode.Value = 0;
@@ -299,7 +310,10 @@ namespace RemoteHandbrakeController
 						}
 						passPrompt = null;
 					}
-					
+
+					selectedPreset = (Preset)comboPresets.SelectedValue;
+					comboPresets.IsEnabled = false;
+
 					btnStartStopEncode.Content = "STOP";
 					btnBack.IsEnabled = false;
 					workerEncode = new BackgroundWorker();
@@ -313,6 +327,7 @@ namespace RemoteHandbrakeController
 				else if (bCurrentlyEncoding)
 				{
 					btnBack.IsEnabled = true;
+					comboPresets.IsEnabled = true;
 					workerEncode.CancelAsync();
 				}
 			}	

@@ -46,7 +46,7 @@ namespace RemoteHandbrakeController
 			}
 			else
 			{
-				return $"HandBrakeCLI -i {m_strInputFile} -o {m_strOutputDir} --preset \"{HandBrakePreset}\"";
+				return $"HandBrakeCLI -i {m_strInputFile} -o {m_strOutputDir} --preset {HandBrakePreset}";
 			}
 		}
 
