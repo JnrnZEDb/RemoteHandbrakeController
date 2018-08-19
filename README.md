@@ -24,8 +24,3 @@ Fixed BUG 1 from v1.1.0.
 
 ### Version: 1.1.0
 Added XML Config that is saved to ProgramData.
-
-## Current Tasks
-BUG 1: When encoding finishes, it doesn't properly finish and reset itself. [FIXED]
-
-TASK 1: Pick encoding preset. [COMPLETED]
