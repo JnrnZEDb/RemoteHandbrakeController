@@ -15,8 +15,8 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_1C63EEC898E2474B9DF6685D3ACC6316"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_23F3ADE0FEC56B68944042857B90E37D"
+        "OwnerKey" = "8:_8004819848FF4C60B183BC08BF5804C4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -33,13 +33,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BB7FDEB606ECFE05B813C7EF22DC3AEA"
-        "OwnerKey" = "8:_8004819848FF4C60B183BC08BF5804C4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E0B5E9F0614A14E6C2B583FE7AD4657D"
+        "MsmKey" = "8:_92B8AA5EDDEAA6DD961766637B9C157D"
         "OwnerKey" = "8:_8004819848FF4C60B183BC08BF5804C4"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -52,13 +46,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E0B5E9F0614A14E6C2B583FE7AD4657D"
+        "OwnerKey" = "8:_92B8AA5EDDEAA6DD961766637B9C157D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BB7FDEB606ECFE05B813C7EF22DC3AEA"
+        "OwnerKey" = "8:_23F3ADE0FEC56B68944042857B90E37D"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -188,10 +182,21 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C63EEC898E2474B9DF6685D3ACC6316"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_23F3ADE0FEC56B68944042857B90E37D"
             {
-            "SourcePath" = "8:..\\SSH.NET\\Renci.SshNet.xml"
-            "TargetName" = "8:Renci.SshNet.xml"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_23F3ADE0FEC56B68944042857B90E37D"
+                    {
+                    "Name" = "8:System.Net.Http.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Net.Http.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C82116116CF04DFC8E55DF40F4923EB9"
             "Condition" = "8:"
@@ -205,7 +210,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_44480DE849894CE8A666CA582307EC73"
@@ -228,39 +233,18 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BB7FDEB606ECFE05B813C7EF22DC3AEA"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-                "ScatterAssemblies"
-                {
-                }
-            "SourcePath" = "8:System.Net.Http.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_C82116116CF04DFC8E55DF40F4923EB9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E0B5E9F0614A14E6C2B583FE7AD4657D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_92B8AA5EDDEAA6DD961766637B9C157D"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_92B8AA5EDDEAA6DD961766637B9C157D"
+                    {
+                    "Name" = "8:Renci.SshNet.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Renci.SshNet.dll"
             "TargetName" = "8:"
@@ -337,7 +321,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RemoteHandbrakeController"
         "ProductCode" = "8:{265D55AE-C929-43AC-B53C-0149A0948587}"
-        "PackageCode" = "8:{8802C2B1-9D5D-46E7-82F2-25F0FFD564B6}"
+        "PackageCode" = "8:{A40A49CD-30C8-4684-B6C5-41B245D5EFF7}"
         "UpgradeCode" = "8:{6CDF8B18-B088-49E2-9034-DAB6DB83A30C}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
