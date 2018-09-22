@@ -14,13 +14,3 @@ Future versions will ideally allow for more customization and configuration.
 https://handbrake.fr/docs/en/latest/developer/build-linux.html
 ### Mount Windows Shares in Linux
 https://wiki.ubuntu.com/MountWindowsSharesPermanently
-
-## Versions
-### Current Version: 1.2.0
-Completed TASK 1.
-
-### Version: 1.1.1
-Fixed BUG 1 from v1.1.0.
-
-### Version: 1.1.0
-Added XML Config that is saved to ProgramData.
