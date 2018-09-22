@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteHandbrakeController"
         mc:Ignorable="d"
-        Title="About" Height="150" Width="400">
+        Title="About" Height="150" Width="400" ResizeMode="NoResize"
+		>
     <Grid Background="LightGray">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
@@ -19,7 +20,6 @@
 			<Label Grid.Column="0" Content="Remote Handbrake Controller" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
 			<Label Grid.Column="1" Content="{Binding versionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
 		</Grid>
-
 		<Label Grid.Row="1" Content="Daniel Shinevar - 2018" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
 	</Grid>
 </Window>

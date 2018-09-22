@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:RemoteHandbrakeController"
              Startup="Application_Startup">
     <Application.Resources>
-         
-    </Application.Resources>
+		<ResourceDictionary Source="Strings.xaml"/>
+	</Application.Resources>
 </Application>
