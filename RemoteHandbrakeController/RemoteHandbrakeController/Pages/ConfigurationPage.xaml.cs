@@ -48,39 +48,6 @@ namespace RemoteHandbrakeController
 			NavigationService.GoBack();
 		}
 
-		/// <summary> Sets path for HandbrakeCLI.exe locally </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnHandbrakeCLI_Path_Click(object sender, RoutedEventArgs e)
-		{
-			OpenFileDialog pathDialog = new OpenFileDialog();
-			pathDialog.Filter = "Executable (*.exe) | *.exe";
-			pathDialog.InitialDirectory = @"C:\";
-			var result = pathDialog.ShowDialog();
-
-			if (result == true)
-			{
-				txtHandbrakeCLI_Path.Text = pathDialog.FileName;
-				xmlConfig.LocalHandbrakeCLIPath = txtHandbrakeCLI_Path.Text;
-			}
-		}
-
-		/// <summary> Sets path for local video output </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnLocalOutput_Path_Click(object sender, RoutedEventArgs e)
-		{
-			using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
-			{
-				System.Windows.Forms.DialogResult dlgResult = dialog.ShowDialog();
-				if (dlgResult == System.Windows.Forms.DialogResult.OK)
-				{
-					txtLocalOutput.Text = dialog.SelectedPath;
-					xmlConfig.LocalOutputDirectory = txtLocalOutput.Text;
-				}
-			}
-		}
-
 		/// <summary> Tests IP address (ping with 10s timeout) </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

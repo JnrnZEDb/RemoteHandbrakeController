@@ -72,34 +72,25 @@ namespace RemoteHandbrakeController
 		public static string BuildInputString(FileInfo inputFile, XMLConfig config)
 		{
 			string strInput = string.Empty;
-			// Local Windows Mode
-			if (config.LocalWindowsMode)
+			if (inputFile.FullName.Contains("Movies"))
 			{
-				strInput = inputFile.FullName;
+				strInput = $@"'{config.RemoteInputDirectory}/Movies/{inputFile.Name}'";
 			}
-			// Linux Mode
 			else
 			{
-				if (inputFile.FullName.Contains("Movies"))
-				{
-					strInput = $@"'{config.RemoteInputDirectory}/Movies/{inputFile.Name}'";
-				}
-				else
-				{
-					string[] folders = inputFile.FullName.Split('\\');
-					string strShow = folders[folders.Length - 3];
-					string strSeason = folders[folders.Length - 2];
+				string[] folders = inputFile.FullName.Split('\\');
+				string strShow = folders[folders.Length - 3];
+				string strSeason = folders[folders.Length - 2];
 
-					if (inputFile.FullName.Contains("TV Shows"))
-					{
-						strInput = $@"'{config.RemoteInputDirectory}/TV Shows/{strShow}/{strSeason}/{inputFile.Name}'";
-					}
-					else if (inputFile.FullName.Contains("Anime"))
-					{
-						strInput = $@"'{config.RemoteInputDirectory}/Anime/{strShow}/{strSeason}/{inputFile.Name}'";
-					}
-				}	
-			}
+				if (inputFile.FullName.Contains("TV Shows"))
+				{
+					strInput = $@"'{config.RemoteInputDirectory}/TV Shows/{strShow}/{strSeason}/{inputFile.Name}'";
+				}
+				else if (inputFile.FullName.Contains("Anime"))
+				{
+					strInput = $@"'{config.RemoteInputDirectory}/Anime/{strShow}/{strSeason}/{inputFile.Name}'";
+				}
+			}	
 			return strInput;
 		}
 
@@ -111,58 +102,27 @@ namespace RemoteHandbrakeController
 		public static string BuildOutputString(FileInfo inputFile, XMLConfig config)
 		{
 			string outputDir = string.Empty;
-			// Local Windows Mode
-			if (config.LocalWindowsMode)
+			if (inputFile.FullName.Contains("Movies"))
 			{
-				if (inputFile.FullName.Contains("Movies"))
-				{
-					outputDir = $@"{config.LocalOutputDirectory}\Movies (Encoded)\{inputFile.Name.Replace("mkv", "m4v")}";
-				}
-				else
-				{
-					string[] folders = inputFile.FullName.Split('\\');
-					string strShow = folders[folders.Length - 3];
-					string strSeason = folders[folders.Length - 2];
-
-					if (inputFile.FullName.Contains("TV Shows"))
-					{
-						outputDir = $@"{config.LocalOutputDirectory}\TV Shows (Encoded)\{strShow}\{strSeason}";
-						Directory.CreateDirectory(outputDir);
-						outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}";
-					}
-					else if (inputFile.FullName.Contains("Anime"))
-					{
-						outputDir = $@"{config.LocalOutputDirectory}\Anime (Encoded)\{strShow}\{strSeason}";
-						Directory.CreateDirectory(outputDir);
-						outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}";
-					}
-				}
+				outputDir = $@"'{config.OutputDirectory}/Movies (Encoded)/{inputFile.Name.Replace("mkv", "m4v")}'";
 			}
-			// Linux Mode
 			else
 			{
-				if (inputFile.FullName.Contains("Movies"))
-				{
-					outputDir = $@"'{config.OutputDirectory}/Movies (Encoded)/{inputFile.Name.Replace("mkv", "m4v")}'";
-				}
-				else
-				{
-					string[] folders = inputFile.FullName.Split('\\');
-					string strShow = folders[folders.Length - 3];
-					string strSeason = folders[folders.Length - 2];
+				string[] folders = inputFile.FullName.Split('\\');
+				string strShow = folders[folders.Length - 3];
+				string strSeason = folders[folders.Length - 2];
 
-					if (inputFile.FullName.Contains("TV Shows"))
-					{
-						outputDir = $@"'{config.OutputDirectory}/TV Shows (Encoded)/{strShow}/{strSeason}";
-						Directory.CreateDirectory($@"\\{config.PlexIP}\Media\TV Shows (Encoded)\{strShow}\{strSeason}"); // Uses mapped network drive Z:/
-						outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}'";
-					}
-					else if (inputFile.FullName.Contains("Anime"))
-					{
-						outputDir = $@"'{config.OutputDirectory}/Anime (Encoded)/{strShow}/{strSeason}";
-						Directory.CreateDirectory($@"\\{config.PlexIP}\Media\Anime (Encoded)\{strShow}\{strSeason}"); // Uses mapped network drive Z:/
-						outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}'";
-					}
+				if (inputFile.FullName.Contains("TV Shows"))
+				{
+					outputDir = $@"'{config.OutputDirectory}/TV Shows (Encoded)/{strShow}/{strSeason}";
+					Directory.CreateDirectory($@"\\{config.PlexIP}\Media\TV Shows (Encoded)\{strShow}\{strSeason}"); // Uses mapped network drive Z:/
+					outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}'";
+				}
+				else if (inputFile.FullName.Contains("Anime"))
+				{
+					outputDir = $@"'{config.OutputDirectory}/Anime (Encoded)/{strShow}/{strSeason}";
+					Directory.CreateDirectory($@"\\{config.PlexIP}\Media\Anime (Encoded)\{strShow}\{strSeason}"); // Uses mapped network drive Z:/
+					outputDir += $@"\{inputFile.Name.Replace("mkv", "m4v")}'";
 				}
 			}
 			return outputDir;

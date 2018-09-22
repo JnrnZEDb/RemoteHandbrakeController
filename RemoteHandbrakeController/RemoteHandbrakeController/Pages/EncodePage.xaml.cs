@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Diagnostics;
 using Renci.SshNet;
-using Renci.SshNet.Common;
+
 
 namespace RemoteHandbrakeController
 {
@@ -84,9 +85,11 @@ namespace RemoteHandbrakeController
 				while (!asynch.IsCompleted)
 				{
 					if (workerEncode.CancellationPending) return false;
-					var result = reader.ReadToEnd();
+					var result = reader.ReadLine();
 					if (string.IsNullOrEmpty(result)) continue;
 					if (result != null) workerEncode.ReportProgress(0, result);
+					reader.DiscardBufferedData();
+					Thread.Sleep(750);
 				}
 				cmdCurrent.EndExecute(asynch);
 				cmdCurrent = null;
@@ -97,59 +100,6 @@ namespace RemoteHandbrakeController
 				MessageBox.Show($"{ex.Message}", "ERROR", MessageBoxButton.OK);
 				return false;
 			}
-		}
-
-		/// <summary>
-		/// Runs command and prints output to window if talking to Windows
-		/// </summary>
-		/// <param name="command"></param>
-		private bool DoWindowsCommand(string command)
-		{
-			string arguments = command.Remove(0, 12);
-			Dispatcher.BeginInvoke(new Action(delegate
-			{
-				txtOutput.AppendText($"{command}\n");
-			}));
-			try
-			{
-				procWnds = new Process();
-				if (xmlConfig.PingTestMode)
-				{
-					procWnds.StartInfo.FileName = "cmd.exe";
-					procWnds.StartInfo.Arguments = "/C ping 127.0.0.1";
-				}
-				else
-				{
-					procWnds.StartInfo.FileName = xmlConfig.LocalHandbrakeCLIPath;
-					procWnds.StartInfo.Arguments = arguments;
-				}
-				
-				procWnds.StartInfo.UseShellExecute = false;
-				procWnds.StartInfo.RedirectStandardOutput = true;
-				procWnds.StartInfo.RedirectStandardInput = true;
-				procWnds.StartInfo.CreateNoWindow = true;
-				procWnds.OutputDataReceived += (sender, args) =>
-				{
-					if (args.Data != null) workerEncode.ReportProgress(0, args.Data);
-				};
-				procWnds.Start();
-				procWnds.BeginOutputReadLine();
-				while(!procWnds.HasExited)
-				{
-					if (workerEncode.CancellationPending)
-					{
-						procWnds.CancelOutputRead();
-						return false;
-					}
-				}
-				return true;
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show($"ERROR: {ex}", "ERROR", MessageBoxButton.OK);
-				return false;
-			}
-
 		}
 		#endregion
 
@@ -173,70 +123,38 @@ namespace RemoteHandbrakeController
 				{
 					strPreset = selectedPreset.PresetName;
 				}			 
-				
 				HandbrakeCommand cmd = new HandbrakeCommand(Globals.BuildInputString(lstFilesToEncode[i], xmlConfig), Globals.BuildOutputString(lstFilesToEncode[i], xmlConfig), strPreset, bImport);
-				// WINDOWS MODE
-				if (xmlConfig.LocalWindowsMode)
+				try
 				{
-					cmd.HandBrakePreset = Globals.WINDOWS_PLEX_PRESET;
-					string strCurrentFile = lstFilesToEncode[i].Name;
-					if (!DoWindowsCommand(cmd.ToString()))
+					using (var client = new SshClient(xmlConfig.PlexIP, xmlConfig.Username, strPassword))
 					{
-						Dispatcher.BeginInvoke(new Action(delegate
+						client.Connect();
+						string strCurrentFile = lstFilesToEncode[i].Name;
+						if (!DoLinuxCommand(cmd.ToString(), client))
 						{
-							txtOutput.AppendText($"FAILED TO ENCODE {strCurrentFile} | ABORTING\n");
-							txtOutput.ScrollToEnd();
-						}));
-						break;
-					}
-					else
-					{
-						DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
-						{
-							txtOutput.AppendText($"{strCurrentFile} FINISHED ENCODING\n");
-							if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
-							prgEncode.Value = 0;
-						}));
-						while (disOp.Status != DispatcherOperationStatus.Completed) ;
-					}
-
-				}
-				// LINUX MODE
-				else
-				{
-					try
-					{
-						using (var client = new SshClient(xmlConfig.PlexIP, xmlConfig.Username, strPassword))
-						{
-							client.Connect();
-							string strCurrentFile = lstFilesToEncode[i].Name;
-							if (!DoLinuxCommand(cmd.ToString(), client))
+							Dispatcher.BeginInvoke(new Action(delegate
 							{
-								Dispatcher.BeginInvoke(new Action(delegate
-								{
-									txtOutput.AppendText($"FAILED TO ENCODE {strCurrentFile} | ABORTING\n");
-									txtOutput.ScrollToEnd();
-								}));
-								break;
-							}
-							else
-							{
-								DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
-								{
-									txtOutput.AppendText($"{strCurrentFile} FINISHED ENCODING\n");
-									if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
-									prgEncode.Value = 0;
-								}));
-								while (disOp.Status != DispatcherOperationStatus.Completed) ;
-							}
-							client.Disconnect();
+								txtOutput.AppendText($"FAILED TO ENCODE {strCurrentFile} | ABORTING\n");
+								txtOutput.ScrollToEnd();
+							}));
+							break;
 						}
+						else
+						{
+							DispatcherOperation disOp = Dispatcher.BeginInvoke(new Action(delegate
+							{
+								txtOutput.AppendText($"{strCurrentFile} FINISHED ENCODING\n");
+								if (lstFilesToEncode.Count > 0) lstFilesToEncode.RemoveAt(i);
+								prgEncode.Value = 0;
+							}));
+							while (disOp.Status != DispatcherOperationStatus.Completed) ;
+						}
+						client.Disconnect();
 					}
-					catch (Exception ex)
-					{
-						MessageBox.Show($"ERROR: {ex}", "ERROR", MessageBoxButton.OK);
-					}
-
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show($"ERROR: {ex}", "ERROR", MessageBoxButton.OK);
 				}
 				if (workerEncode.CancellationPending) return;
 			}
@@ -252,11 +170,10 @@ namespace RemoteHandbrakeController
 			if (Regex.Match(strOutput, @"\d+(?:\.\d+) %").Success)
 			{
 				string strProgress = Regex.Match(strOutput, @"\d+(?:\.\d+) %").Value;
-				int iProgress = (int)Convert.ToDouble(strProgress.Substring(0, 4));
+				double iProgress = Convert.ToDouble(strProgress.Substring(0, 4));
 				prgEncode.Value = iProgress;
 			}
-			if (xmlConfig.LocalWindowsMode) txtOutput.AppendText($"{strOutput}\n");
-			else txtOutput.AppendText(strOutput);
+			txtOutput.AppendText($"{strOutput}\n");
 			txtOutput.ScrollToEnd();
 		}
 
@@ -295,21 +212,19 @@ namespace RemoteHandbrakeController
 			{
 				if (!bCurrentlyEncoding)
 				{
-					if (!xmlConfig.LocalWindowsMode)
+
+					strPassword = string.Empty;
+					PasswordPrompt passPrompt = new PasswordPrompt();
+					if (passPrompt.ShowDialog().Value)
 					{
-						strPassword = string.Empty;
-						PasswordPrompt passPrompt = new PasswordPrompt();
-						if (passPrompt.ShowDialog().Value)
-						{
-							strPassword = passPrompt.strPassword;
-						}
-						else
-						{
-							passPrompt = null;
-							return;
-						}
-						passPrompt = null;
+						strPassword = passPrompt.strPassword;
 					}
+					else
+					{
+						passPrompt = null;
+						return;
+					}
+					passPrompt = null;
 
 					selectedPreset = (Preset)comboPresets.SelectedValue;
 					comboPresets.IsEnabled = false;

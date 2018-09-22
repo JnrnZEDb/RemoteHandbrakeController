@@ -33,7 +33,6 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="40"/>
 			</Grid.RowDefinitions>
 			<GroupBox Grid.Row="0" Header="REMOTE/LINUX SETTINGS" FontSize="16" FontWeight="Bold">
@@ -66,30 +65,7 @@
 					<TextBox Name="txtOutput" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextBox}" Text="{Binding Path=OutputDirectory, Mode=TwoWay}" ToolTip="{StaticResource LinuxOutputDirectoryToolTip}"/>
 				</Grid>
 			</GroupBox>
-			<GroupBox Grid.Row="1" Header="LOCAL/WINDOWS SETTINGS" FontSize="16" FontWeight="Bold">
-				<Grid>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="40"/>
-						<RowDefinition Height="40"/>
-						<RowDefinition Height="40"/>
-						<RowDefinition Height="40"/>
-					</Grid.RowDefinitions>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="175"/>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="60"/>
-					</Grid.ColumnDefinitions>
-					<!--LOCAL HANDBRAKECLI LOCATION-->
-					<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="HB CLI Location" FontSize="22" FontWeight="Bold" />
-					<TextBox Name="txtHandbrakeCLI_Path" Grid.Column="1" Grid.Row="0" Style="{StaticResource TextBox}" Text="{Binding Path=LocalHandbrakeCLIPath, Mode=TwoWay}"/>
-					<Button Name="btnHandbrakeCLI_Path" Grid.Column="2" Grid.Row="0" Style="{StaticResource Button}" Content="Path" Click="btnHandbrakeCLI_Path_Click"/>
-					<!--LOCAL OUTPUT-->
-					<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Local Output" FontSize="24" FontWeight="Bold" />
-					<TextBox Name="txtLocalOutput" Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBox}" Text="{Binding Path=LocalOutputDirectory, Mode=TwoWay}"/>
-					<Button Name="btnLocalOutput_Path" Grid.Column="2" Grid.Row="1" Style="{StaticResource Button}" Content="Path" Click="btnLocalOutput_Path_Click"/>
-				</Grid>
-			</GroupBox>
-			<GroupBox Grid.Row="2" Header="GENERAL SETTINGS" FontSize="16" FontWeight="Bold">
+			<GroupBox Grid.Row="1" Header="GENERAL SETTINGS" FontSize="16" FontWeight="Bold">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="*"/>
@@ -102,21 +78,17 @@
 						<ColumnDefinition Width="60"/>
 					</Grid.ColumnDefinitions>
 
-					<!--LOCAL_WINDOWS_MODE-->
-					<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Local Mode" FontSize="19" FontWeight="Bold"/>
-					<CheckBox Name="chkLocalWindowsMode" Grid.Column="1" Grid.Row="0" Style="{StaticResource CheckBox}" ToolTip="{StaticResource LocalWindowsModeToolTip}"  
-						IsChecked="{Binding Path=LocalWindowsMode, Mode=TwoWay}"/>
 					<!--TEST_MODE-->
-					<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Test Mode" FontSize="19" FontWeight="Bold"/>
-					<CheckBox Name="chkTestMode" Grid.Column="1" Grid.Row="1" Style="{StaticResource CheckBox}" ToolTip="{StaticResource TestModeToolTip}"  
+					<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Set Test Mode" FontSize="19" FontWeight="Bold"/>
+					<CheckBox Name="chkTestMode" Grid.Column="1" Grid.Row="0" Style="{StaticResource CheckBox}" ToolTip="{StaticResource TestModeToolTip}"  
 						IsChecked="{Binding Path=PingTestMode, Mode=TwoWay}"/>
 					<!--CUSTOME HANDBRAKE PRESETS-->
-					<TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Custom Handbrake Presets" FontSize="19" FontWeight="Bold" TextWrapping="Wrap"/>
-					<TextBox Name="txtCustomHandbrakePresetsDirectory" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TextBox}"
+					<TextBlock  Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Custom Handbrake Presets" FontSize="19" FontWeight="Bold" TextWrapping="Wrap"/>
+					<TextBox Name="txtCustomHandbrakePresetsDirectory" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource TextBox}"
 							 Text="{Binding Path=CustomHandbrakePresetsDirectory, Mode=TwoWay}" ToolTip="{StaticResource CustomHandbrakePresets}"/>
 				</Grid>
 			</GroupBox>
-			<Grid Grid.Row="3">
+			<Grid Grid.Row="2">
 				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*"/>

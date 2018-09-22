@@ -24,10 +24,6 @@
 			<Frame Name="MainFrame" Grid.Row="0" DockPanel.Dock="Bottom" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
 			<StatusBar Grid.Row="1">
 				<StatusBarItem>
-					<TextBlock Name="txtMode"/>
-				</StatusBarItem>
-				<Separator Width="2" />
-				<StatusBarItem>
 					<TextBlock Name="txtTestMode"/>
 				</StatusBarItem>
 				<Separator Width="2" />

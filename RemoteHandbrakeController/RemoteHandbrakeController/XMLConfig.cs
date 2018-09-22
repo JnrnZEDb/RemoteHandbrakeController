@@ -1,22 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RemoteHandbrakeController
 {
 	[Serializable]
 	public class XMLConfig
 	{
-		private bool _localWindowsMode;
-		/// <summary> Sets if it is running in local mode </summary>
-		public bool LocalWindowsMode
-		{
-			get { return _localWindowsMode; }
-			set { _localWindowsMode = value; }
-		}
-
 		private bool _pingTestMode;
 		/// <summary> Sets if it is running in test mode which will
 		/// send pings out instead of the Handbrake command.
@@ -51,22 +40,6 @@ namespace RemoteHandbrakeController
 			set { _outputDirectory = value; }
 		}
 
-		private string _localOutputDirectory;
-		/// <summary> Local encoding output file path </summary>
-		public string LocalOutputDirectory
-		{
-			get { return _localOutputDirectory; }
-			set { _localOutputDirectory = value; }
-		}
-
-		private string _localHandbrakeCLIPath;
-		/// <summary> Path of local Windows HandbrakeCLI executable </summary>
-		public string LocalHandbrakeCLIPath
-		{
-			get { return _localHandbrakeCLIPath; }
-			set { _localHandbrakeCLIPath = value; }
-		}
-
 		private string _remoteInputDirectory;
 		/// <summary> Remote view of input directories </summary>
 		public string RemoteInputDirectory
@@ -91,12 +64,9 @@ namespace RemoteHandbrakeController
 		{
 			_username = "dshinevar";
 			_plexIP = "10.0.0.2";
-			_outputDirectory = "/home/Media";
-			_localHandbrakeCLIPath = @"C:\Program Files (x86)\";
-			_localOutputDirectory = @"E:\Libraries\Videos";
-			_remoteInputDirectory = @"/media/windowsmedia";
+			_outputDirectory = "/library/video";
+			_remoteInputDirectory = @"/media/windows";
 			_CustomHandbrakePresetsDirectory = @"Z:\";
-			_localWindowsMode = false;
 			_pingTestMode = false;
 			InputDirectories = new List<InputDirectory>();
 		}

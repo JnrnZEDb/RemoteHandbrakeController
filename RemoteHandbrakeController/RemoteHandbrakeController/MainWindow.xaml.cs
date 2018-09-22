@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Timers;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using Renci.SshNet;
 
 
 namespace RemoteHandbrakeController
@@ -34,7 +32,7 @@ namespace RemoteHandbrakeController
 			timerStatus = new Timer();
 			timerStatus.Elapsed += new ElapsedEventHandler(OnTimedEvent);
 			timerStatus.Interval = 1500;
-			timerStatus.Enabled = true;
+			timerStatus.Start();
 
 			MediaSelectionPage mediaSelectionPage = new MediaSelectionPage(xmlConfig);
 			InitializeComponent();
@@ -71,9 +69,6 @@ namespace RemoteHandbrakeController
 		{
 			if (Globals.currentFileBeingEncoded != String.Empty) Dispatcher.Invoke(() => txtCurrentFile.Text = $"CURRENTLY ENCODING { Globals.currentFileBeingEncoded}");
 			else Dispatcher.Invoke(() => txtCurrentFile.Text = String.Empty);
-
-			if (xmlConfig.LocalWindowsMode) Dispatcher.Invoke(() => txtMode.Text = "LOCAL WINDOWS MODE");
-			else Dispatcher.Invoke(() => txtMode.Text = "REMOTE LINUX MODE");
 
 			if (xmlConfig.PingTestMode) Dispatcher.Invoke(() => txtTestMode.Text = "TEST MODE");
 			else Dispatcher.Invoke(() => txtTestMode.Text = "ENCODE MODE");
